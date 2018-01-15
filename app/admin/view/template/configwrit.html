@@ -1,0 +1,54 @@
+<div style="margin: 15px;">
+	<form class="layui-form" id="formEditHandlingFee">
+	   
+		<div class="layui-form-item">
+			<label class="layui-form-label">标题</label>
+			<div class="layui-input-block">
+				<input type="text" name="configwrit_title" value="<?php echo $configwrit['configwrit_title'];?>" placeholder="博客标题,显示在浏览器上面.." class="layui-input">
+			</div>
+		</div>
+
+
+		<div class="layui-form-item">
+			<label class="layui-form-label">伪静态</label>
+			<div class="layui-input-block">
+            <input type="radio" name="configwrit_static" value="1" title="伪静态" <?php echo $configwrit['configwrit_static']==1?'checked':'';?>>
+			<input type="radio" name="configwrit_static" value="2" title="目录形式" <?php echo $configwrit['configwrit_static']==2?'checked':'';?>>
+			</div>
+		</div>
+		
+		<div class="layui-form-item">
+			<label class="layui-form-label">网站关键词</label>
+			<div class="layui-input-block">
+				<input type="text" name="configwrit_keywrod" value="<?php echo $configwrit['configwrit_keywrod'];?>" placeholder="关键词.." class="layui-input">
+			</div>
+		</div>
+		
+        <div class="layui-form-item layui-form-text">
+					<label class="layui-form-label">网站介绍</label>
+					<div class="layui-input-block">
+						<textarea name="configwrit_introduction" value="<?php echo $configwrit['configwrit_introduction'];?>" placeholder="网站介绍..." class="layui-textarea"></textarea>
+			</div>
+		</div>
+		
+		<div class="layui-form-item">
+			<label class="layui-form-label">博客状态</label>
+			<div class="layui-input-block">
+            <input type="radio" name="configwrit_open" value="1" title="开启" <?php echo $configwrit['configwrit_open']==1?'checked':'';?>>
+			<input type="radio" name="configwrit_open" value="2" title="关闭" <?php echo $configwrit['configwrit_open']==2?'checked':'';?>>
+			</div>
+		</div>
+		
+		<div class="layui-form-item">
+			<label class="layui-form-label">热门浏览量</label>
+			<div class="layui-input-block">
+				<input type="text" name="configwrit_hotnum" value="<?php echo $configwrit['configwrit_hotnum'];?>" placeholder="浏览量到达多少自动热门.." class="layui-input">
+			</div>
+		</div>
+	
+		
+		
+		
+		<button lay-filter="edit" lay-submit style="display: none;"></button>
+	</form>
+</div>

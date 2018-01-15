@@ -1,0 +1,32 @@
+<div style="margin: 15px;">
+	<form class="layui-form" id="formAddHandlingFee">
+		<div class="layui-form-item">
+			<label class="layui-form-label">绑定软件</label>
+			<div class="layui-input-block">
+			<?php foreach($item as $it){?>
+				<input type="checkbox" name="recharge_itemid[]" value="<?php echo $it['id']?>" title="<?php echo $it['item_name']?>">
+			<?php }?>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">生成数量</label>
+			<div class="layui-input-block">
+				<input type="text" name="num" placeholder="请输入要生成充值卡数量.." class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">充值卡面值</label>
+			<div class="layui-input-block">
+				<input type="text" name="recharge_paynum" value="0.00" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">卡号类型</label>
+			<div class="layui-input-block">
+				<input type="radio" name="recharge_logint" value="1" title="用户充值" checked>
+				<input type="radio" name="recharge_logint" value="2" title="卡号登录">
+			</div>
+		</div>
+		<button lay-filter="edit" lay-submit style="display: none;"></button>
+	</form>
+</div>

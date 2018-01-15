@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>LOGIN - GOD</title>
+	<link rel="stylesheet" href="<?php echo __PUBLIC__;?>assets/css/font-icons/entypo/css/entypo.css">
+	<link rel="stylesheet" href="<?php echo __PUBLIC__;?>assets/css/bootstrap.css">
+	<link rel="stylesheet" href="<?php echo __PUBLIC__;?>assets/css/neon-theme.css">
+	<script src="<?php echo __PUBLIC__;?>assets/js/jquery-1.11.0.min.js"></script>
+
+
+	<!--[if lt IE 9]><script src="<?php echo __PUBLIC__;?>assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+	<!--[if lt IE 9]>
+		<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+		<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+	<![endif]-->
+
+
+</head>
+<body class="page-body login-page login-form-fall">
+
+
+<div class="login-container">
+	
+	<div class="login-header login-caret">
+		
+		<div class="login-content">
+			
+			<a class="logo">
+				<img src="<?php echo __PUBLIC__;?>assets/images/logox.png" width="130" alt="" />
+			</a>
+	
+		</div>
+		
+	</div>
+	
+	<div class="login-progressbar">
+		<div></div>
+	</div>
+	
+	<div class="login-form">
+		
+		<div class="login-content">
+			
+			<form role="form" id="form_login">
+				
+				<div class="form-group">
+					
+					<div class="input-group">
+						<div class="input-group-addon">
+							<i class="entypo-user"></i>
+						</div>
+						<input type="hidden" class="form-control" value="<?php echo $token;?>" name="token" autocomplete="off" />
+						<input type="text" class="form-control" name="username" placeholder="请输入用户名.." autocomplete="off" />
+					</div>
+					
+				</div>
+				
+				<div class="form-group">
+					
+					<div class="input-group">
+						<div class="input-group-addon">
+							<i class="entypo-key"></i>
+						</div>
+						<input type="password" class="form-control" name="password" placeholder="请输入用户密码.." autocomplete="off" />
+					</div>
+				
+				</div>
+				<div class="form-group">
+					<button id="login" type="button" class="btn btn-default btn-lg btn-block btn-icon icon-left facebook-button">
+						Login in
+						<i class="entypo-login"></i>
+					</button>
+				</div>
+				
+		
+				
+			</form>
+			
+			
+			<div class="login-bottom-links">
+				
+				<a href="<?php echo __URL__;?>index.php/agent/index/passwordreset" class="link">Forgot your password?</a>
+				
+				
+				
+			</div>
+			
+		</div>
+		
+	</div>
+	
+</div>
+
+	
+
+
+	<!-- Bottom scripts (common) -->
+
+	<script src="<?php echo __PUBLIC__;?>assets/js/bootstrap.js"></script>
+	<script src="<?php echo __PUBLIC__;?>assets/js/jquery.validate.min.js"></script>
+	<script src="<?php echo __PUBLIC__;?>assets/js/neon-login.js"></script>
+
+
+	<script>
+	$(document).ready(function(){
+				$('#login').click(function(){
+					$.ajax({
+	                    type: "POST",
+	                    dataType: "json",
+	                    url: '<?php echo __URL__;?>index.php/agent/server/login',
+	                    data: $('#form_login').serialize(),
+	                    success: function (data) {
+		                     if(data.code == "1"){
+		                    	alert(data.msg + '!\n' +'上次登录IP:'+data.data.oldip+'('+data.data.oldarea+')\n本次登录IP:'+data.data.ip+'('+data.data.area+')');
+		                    	location.href='<?php echo __URL__;?>index.php/agent/index/home';
+			                 }else{
+			                	alert(data.msg);
+							 } 
+	                    },
+	                    error: function(data) {
+	                        alert("数据库发生错误");
+	                     }
+		 			});
+				});
+		});
+	
+	</script>
+
+
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="format-detection" content="telephone=no">
+		<link rel="stylesheet" href="<?php echo __PUBLIC__;?>plugins/layui/css/layui.css" media="all" />
+        <style>
+		body{
+		font-family:微软雅黑;
+		}
+		</style>
+	</head>
+
+	<body>
+		<div style="margin: 15px;">
+		
+
+			<form class="layui-form" id="formEditHandlingFee" action="">
+			
+			<div class="layui-form-item">
+			<label class="layui-form-label">批卡代码</label>
+			<div class="layui-input-block">
+			<input type="text" value="<?php echo get('code');?>" class="layui-input">
+			</div>
+			</div>
+		
+		<div class="layui-form-item">
+			<label class="layui-form-label">充值卡数量</label>
+			<div class="layui-input-block">
+			<input type="text" value="<?php echo $count;?>" class="layui-input">
+			</div>
+		</div>
+		
+		<div class="layui-form-item">
+			<label class="layui-form-label">显示类型</label>
+			<div class="layui-input-block">
+			<a href='<?php echo preg_replace("/\/use\/[\s\S]+?/", "", geturl());?>' class="layui-btn layui-btn-radius">全部</a>
+			<a href='<?php echo preg_replace("/\/use\/[\s\S]+?/", "", geturl());?>/use/5' class="layui-btn layui-btn-warm layui-btn-radius">可使用</a>
+			<a href='<?php echo preg_replace("/\/use\/[\s\S]+?/", "", geturl());?>/use/1' class="layui-btn layui-btn-normal layui-btn-radius">已使用</a>
+			<a href='<?php echo preg_replace("/\/use\/[\s\S]+?/", "", geturl());?>/use/2' class="layui-btn layui-btn-normal layui-btn-radius">未使用</a>
+			<a href='<?php echo preg_replace("/\/use\/[\s\S]+?/", "", geturl());?>/use/3' class="layui-btn layui-btn-danger layui-btn-radius">已冻结</a>
+			<a href='<?php echo preg_replace("/\/use\/[\s\S]+?/", "", geturl());?>/use/4' class="layui-btn layui-btn-danger layui-btn-radius">未冻结</a>
+			<a href='<?php echo __URL__;?>index.php/admin/server/pub/action/delete/tpl/recharge/id/<?php echo $idNum;?>/url/<?php echo Sendurl();?>' class="layui-btn layui-btn-radius">删除该分类的充值卡</a>
+			</div>
+		</div>
+		
+		<div class="layui-form-item layui-form-text">
+			<label class="layui-form-label">全部卡号</label>
+			<div class="layui-input-block">
+			<textarea class="layui-textarea" rows="30"><?php echo $cami;?></textarea>
+			</div>
+		</div>
+				
+			</form>
+		</div>
+		<script type="text/javascript" src="<?php echo __PUBLIC__;?>plugins/layui/layui.js"></script>
+		<script>
+		layui.use(['form', 'layedit', 'laydate'], function() { 
+			var form = layui.form(),
+				layer = layui.layer,
+				layedit = layui.layedit,
+				laydate = layui.laydate;
+		});
+
+		</script>
+	</body>
+
+</html>
+	

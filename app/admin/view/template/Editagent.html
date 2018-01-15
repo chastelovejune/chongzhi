@@ -1,0 +1,101 @@
+<div style="margin: 15px;">
+	<form class="layui-form" id="formEditHandlingFee">
+	    <div class="layui-form-item">
+					<label class="layui-form-label">分销商级别</label>
+					<div class="layui-input-block">
+						<select name="agent_idrank">
+							<option value="null">请选择分销商级别</option>
+							<?php $rank = M("agentrank")->select();
+							foreach ($rank as $r){
+							?>
+							<option value="<?php echo $r['id'];?>" <?php echo $agentdb['agent_idrank']==$r['id']?'selected':'';?>><?php echo $r['agentrank_name'];?></option>
+							<?php }?>
+						</select>
+					</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">用户名</label>
+			<div class="layui-input-block">
+				<input type="text" name="agent_username" value="<?php echo $agentdb['agent_username'];?>" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">密  码</label>
+			<div class="layui-input-block">
+			<input type="password" name="agent_password" placeholder="不修改密码请留空..." class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">绑定软件</label>
+			<div class="layui-input-block">
+			<?php $itemarr = explode(",", $agentdb['agent_itemid']); foreach($item as $it){?>
+				<input type="checkbox" name="agent_itemid[]" value="<?php echo $it['id'];?>" <?php for($i=0;$i<count($itemarr);$i++){if($itemarr[$i]==$it['id']){echo 'checked';}}?> title="<?php echo $it['item_name']?>">
+			<?php }?>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">充值点</label>
+			<div class="layui-input-block">
+				<input type="text" name="agent_moeny" value="<?php echo $agentdb['agent_moeny'];?>" class="layui-input">
+			</div>
+		</div>
+	<!--	<div class="layui-form-item">
+			<label class="layui-form-label">盈利余额</label>
+			<div class="layui-input-block">
+				<input type="text" name="agent_gain" value="<?php echo $agentdb['agent_gain'];?>" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">总盈利余额</label>
+			<div class="layui-input-block">
+				<input type="text" name="agent_gainAll" value="<?php echo $agentdb['agent_gainAll'];?>" class="layui-input">
+			</div>
+		</div>-->
+		<div class="layui-form-item">
+			<label class="layui-form-label">QQ账号</label>
+			<div class="layui-input-block">
+				<input type="text" name="agent_qq" value="<?php echo $agentdb['agent_qq'];?>" class="layui-input">
+			</div>
+		</div>
+
+		<div class="layui-form-item">
+			<label class="layui-form-label">邮箱地址</label>
+			<div class="layui-input-block">
+				<input type="text" name="agent_email" value="<?php echo $agentdb['agent_email'];?>" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">提现方式</label>
+			<div class="layui-input-block">
+				<input type="radio" name="agent_payment" value="1" title="支付宝" <?php echo $agentdb['agent_payment']==1?'checked':'';?> >
+				<input type="radio" name="agent_payment" value="2" title="银行卡(填写账户前面加卡类型)" <?php echo $agentdb['agent_payment']==2?'checked':'';?>>
+				<input type="radio" name="agent_payment" value="3" title="Paypal" <?php echo $agentdb['agent_payment']==3?'checked':'';?>>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">提现账户</label>
+			<div class="layui-input-block">
+				<input type="text" name="agent_payname" value="<?php echo $agentdb['agent_payname'];?>" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">上级分销商</label>
+			<div class="layui-input-block">
+				<input type="text" name="agent_levelid" value="<?php if($agentdb['agent_levelid']==0){echo '0';}else{echo M('agent')->select("id={$agentdb['agent_levelid']}")[0]['agent_username'];}?>" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">利润点</label>
+			<div class="layui-input-block">
+				<input type="text" name="agent_profit" value="<?php echo $agentdb['agent_profit'];?>" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">下级权限</label>
+			<div class="layui-input-block">
+				<input type="checkbox" name="agent_power" value="1" lay-skin="switch" <?php echo $agentdb['agent_power']==1?'checked':'';?>>
+			</div>
+		</div>
+		<button lay-filter="edit" lay-submit style="display: none;"></button>
+	</form>
+</div>

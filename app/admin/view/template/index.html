@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>GOD网络验证 - 后台管理系统</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="format-detection" content="telephone=no">
+		<link rel="stylesheet" href="<?php echo __PUBLIC__;?>plugins/layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="<?php echo __PUBLIC__;?>css/global.css?ver=1.2" media="all">
+		<link rel="stylesheet" type="text/css" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.css">
+
+	</head>
+
+	<body>
+		<div class="layui-layout layui-layout-admin" style="border-bottom: solid 5px #1aa094;">
+			<div class="layui-header header header-demo">
+				<div class="layui-main">
+					<div class="admin-login-box">
+						<!--<a class="logo" style="left: 10px;top:18px;">-->
+							<!--<span style="font-size: 20px;font-family:微软雅黑;color:white;">GOD网络验证</span>-->
+						<!--</a>-->
+						<div class="admin-side-toggle">
+							<i class="fa fa-bars" aria-hidden="true"></i>
+						</div>
+						<div class="admin-side-full">
+							<i class="fa fa-life-bouy" aria-hidden="true"></i>
+						</div>
+					</div>
+					<ul class="layui-nav admin-header-item">
+						
+						<li class="layui-nav-item">
+							<a href="javascript:;" class="admin-header-user">
+								<img src="http://q1.qlogo.cn/g?b=qq&nk=<?php echo $user['man_qq'];?>&s=160&t=11111" />
+								<span><?php echo decrypt(cookie("_u"),"hello","mengi");?></span>
+							</a>
+							<dl class="layui-nav-child">
+								
+								<dd>
+									<a href="javascript:;" id="pass"><i class="fa fa-gear" aria-hidden="true"></i> 修改密码</a>
+								</dd>
+								
+								<dd>
+									<a href="<?php echo __URL__;?>index.php/admin/server/exitlogin"><i class="fa fa-sign-out" aria-hidden="true"></i> 注销登录</a>
+								</dd>
+							</dl>
+						</li>
+					</ul>
+					
+				</div>
+			</div>
+			<div class="layui-side layui-bg-black" id="admin-side">
+				<div class="layui-side-scroll" id="admin-navbar-side" lay-filter="side"></div>
+			</div>
+			<div class="layui-body" style="bottom: 0;border-left: solid 2px #1AA094;" id="admin-body">
+				<div class="layui-tab admin-nav-card layui-tab-brief" lay-filter="admin-tab">
+					<ul class="layui-tab-title">
+						<li class="layui-this">
+							<i class="fa fa-dashboard" aria-hidden="true"></i>
+							<cite>控制面板</cite>
+						</li>
+					</ul>
+					<div class="layui-tab-content" style="min-height: 150px; padding: 5px 0 0 0;">
+						<div class="layui-tab-item layui-show">
+							<iframe src="<?php echo __URL__;?>index.php/admin/index/main"></iframe>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="layui-footer footer footer-demo" id="admin-footer">
+				<div class="layui-main">
+					<small style="color:green;">欢迎使用，感谢有你</small>
+				</div>
+			</div>
+			<div class="site-tree-mobile layui-hide">
+				<i class="layui-icon">&#xe602;</i>
+			</div>
+			<div class="site-mobile-shade"></div>
+			
+			
+			
+			<script type="text/javascript" src="<?php echo __PUBLIC__;?>plugins/layui/layui.js"></script>
+			<script>
+			
+			var navs = [{
+				"title": "系统功能",
+				"icon": "fa-cog",
+				"spread": true,
+				"children": [{
+					"title": "多软件管理",
+					"icon": "&#xe638;",
+					"href": "<?php echo __URL__;?>index.php/admin/index/artment"
+				}, {
+					"title": "支付接口",
+					"icon": "&#xe62b;",
+					"href": "<?php echo __URL__;?>index.php/admin/index/dime"
+				}, {
+					"title": "动态数据安全",
+					"icon": "&#xe617;",
+					"href": "<?php echo __URL__;?>index.php/admin/index/security"
+				}]
+			}, {
+				"title": "商城系统",
+				"icon": "fa-delicious",
+				"spread": false,
+				"children": [{
+					"title": "商品分类",
+					"icon": "fa-suitcase",
+					"href": "<?php echo __URL__;?>index.php/admin/index/shoprt"
+				}, {
+					"title": "商品列表",
+					"icon": "fa-shopping-cart",
+					"href": "<?php echo __URL__;?>index.php/admin/index/shop"
+				}, {
+					"title": "商品订单",
+					"icon": "fa-github",
+					"href": "<?php echo __URL__;?>index.php/admin/index/shopbuy"
+				}]
+			}, {
+				"title": "分销系统",
+				"icon": "fa-delicious",
+				"spread": false,
+				"children": [{
+					"title": "充值卡管理",
+					"icon": "fa-qrcode",
+					"href": "<?php echo __URL__;?>index.php/admin/index/recharge"
+				}, {
+					"title": "分销商管理",
+					"icon": "fa-user-md",
+					"href": "<?php echo __URL__;?>index.php/admin/index/agent"
+				}, {
+					"title": "分销商等级",
+					"icon": "fa-th-large",
+					"href": "<?php echo __URL__;?>index.php/admin/index/agentrank"
+				}, {
+					"title": "充值卡类型",
+					"icon": "fa-flickr",
+					"href": "<?php echo __URL__;?>index.php/admin/index/cardtype"
+				},{
+					"title": "聊天信息",
+					"icon": "fa-comment",
+					"href": "<?php echo __URL__;?>index.php/admin/index/chat"
+				}]
+			}, {
+				"title": "会员管理",
+				"icon": "fa-user",
+				"href": "<?php echo __URL__;?>index.php/admin/index/user",
+				"spread": false
+			}, {
+				"title": "提现管理",
+				"icon": "fa-btc",
+				"href": "<?php echo __URL__;?>index.php/admin/index/deposit",
+				"spread": false
+			}, {
+				"title": "全局设置",
+				"icon": "fa-deviantart",
+				"href": "<?php echo __URL__;?>index.php/admin/index/setTings",
+				"spread": false
+			}, {
+				"title": "支付订单",
+				"icon": "fa-jpy",
+				"href": "<?php echo __URL__;?>index.php/admin/index/alipay",
+				"spread": false
+			},{
+                "title": "广告管理",
+                "icon": "fa-delicious",
+                "href": "<?php echo __URL__;?>index.php/admin/index/advertize",
+                "spread": false
+            }, {
+				"title": "插件功能",
+				"icon": "fa-bolt",
+				"spread": false,
+				"children": [{
+					"title": "博客系统",
+					"icon": "fa-plus",
+					"href": "<?php echo __URL__;?>index.php/admin/index/blog",
+					"spread": false
+				}]
+			}];
+			</script>
+			<script>
+			var tab;
+
+			layui.config({
+				base: '<?php echo __PUBLIC__;?>js/',
+				version:new Date().getTime()
+			}).use(['element', 'layer', 'navbar', 'tab'], function() {
+				var element = layui.element(),
+					$ = layui.jquery,
+					layer = layui.layer,
+					navbar = layui.navbar();
+					tab = layui.tab({
+						elem: '.admin-nav-card' //设置选项卡容器
+							,
+						//maxSetting: {
+						//	max: 5,
+						//	tipMsg: '只能开5个哇，不能再开了。真的。'
+						//},
+						contextMenu:true
+					});
+				//iframe自适应
+				$(window).on('resize', function() {
+					var $content = $('.admin-nav-card .layui-tab-content');
+					$content.height($(this).height() - 147);
+					$content.find('iframe').each(function() {
+						$(this).height($content.height());
+					});
+				}).resize();
+
+				//设置navbar
+				navbar.set({
+					spreadOne: true,
+					elem: '#admin-navbar-side',
+					cached: true,
+					data: navs
+					/*cached:true,
+					url: 'datas/nav.json'*/
+				});
+				//渲染navbar
+				navbar.render();
+				//监听点击事件
+				navbar.on('click(side)', function(data) {
+					tab.tabAdd(data.field);
+				});
+
+				$('.admin-side-toggle').on('click', function() {
+					var sideWidth = $('#admin-side').width();
+					if(sideWidth === 200) {
+						$('#admin-body').animate({
+							left: '0'
+						}); //admin-footer
+						$('#admin-footer').animate({
+							left: '0'
+						});
+						$('#admin-side').animate({
+							width: '0'
+						});
+					} else {
+						$('#admin-body').animate({
+							left: '200px'
+						});
+						$('#admin-footer').animate({
+							left: '200px'
+						});
+						$('#admin-side').animate({
+							width: '200px'
+						});
+					}
+				});
+				$('.admin-side-full').on('click', function() {
+					var docElm = document.documentElement;
+					//W3C  
+					if(docElm.requestFullscreen) {
+						docElm.requestFullscreen();
+					}
+					//FireFox  
+					else if(docElm.mozRequestFullScreen) {
+						docElm.mozRequestFullScreen();
+					}
+					//Chrome等  
+					else if(docElm.webkitRequestFullScreen) {
+						docElm.webkitRequestFullScreen();
+					}
+					//IE11
+					else if(elem.msRequestFullscreen) {
+						elem.msRequestFullscreen();
+					}
+					layer.msg('按Esc即可退出全屏');
+				});
+				
+				
+
+				//锁屏
+				$(document).on('keydown', function() {
+					var e = window.event;
+					if(e.keyCode === 76 && e.altKey) {
+						//alert("你按下了alt+l");
+						lock($, layer);
+					}
+				});
+				$('#lock').on('click', function() {
+					lock($, layer);
+				});
+
+				//手机设备的简单适配
+				var treeMobile = $('.site-tree-mobile'),
+					shadeMobile = $('.site-mobile-shade');
+				treeMobile.on('click', function() {
+					$('body').addClass('site-mobile');
+				});
+				shadeMobile.on('click', function() {
+					$('body').removeClass('site-mobile');
+				});
+			});
+
+			var isShowLock = false;
+			function lock($, layer) {
+				if(isShowLock)
+					return;
+				//自定页
+				layer.open({
+					title: false,
+					type: 1,
+					closeBtn: 0,
+					anim: 6,
+					content: $('#lock-temp').html(),
+					shade: [0.9, '#393D49'],
+					success: function(layero, lockIndex) {
+						isShowLock = true;
+						//给显示用户名赋值
+						layero.find('div#lockUserName').text('admin');
+						layero.find('input[name=lockPwd]').on('focus', function() {
+								var $this = $(this);
+								if($this.val() === '输入密码解锁..') {
+									$this.val('').attr('type', 'password');
+								}
+							})
+							.on('blur', function() {
+								var $this = $(this);
+								if($this.val() === '' || $this.length === 0) {
+									$this.attr('type', 'text').val('输入密码解锁..');
+								}
+							});
+						//在此处可以写一个请求到服务端删除相关身份认证，因为考虑到如果浏览器被强制刷新的时候，身份验证还存在的情况			
+						//do something...
+						//e.g. 
+						/*
+						 $.post(url,params,callback,'json');
+						 */
+						//绑定解锁按钮的点击事件
+						layero.find('button#unlock').on('click', function() {
+							var $lockBox = $('div#lock-box');
+
+							var userName = $lockBox.find('div#lockUserName').text();
+							var pwd = $lockBox.find('input[name=lockPwd]').val();
+							if(pwd === '输入密码解锁..' || pwd.length === 0) {
+								layer.msg('请输入密码..', {
+									icon: 2,
+									time: 1000
+								});
+								return;
+							}
+							unlock(userName, pwd);
+						});
+						/**
+						 * 解锁操作方法
+						 * @param {String} 用户名
+						 * @param {String} 密码
+						 */
+						var unlock = function(un, pwd) {
+							//这里可以使用ajax方法解锁
+							/*$.post('api/xx',{username:un,password:pwd},function(data){
+							 	//验证成功
+								if(data.success){
+									//关闭锁屏层
+									layer.close(lockIndex);
+								}else{
+									layer.msg('密码输入错误..',{icon:2,time:1000});
+								}					
+							},'json');
+							*/
+							isShowLock = false;
+							//演示：默认输入密码都算成功
+							//关闭锁屏层
+							layer.close(lockIndex);
+						};
+					}
+				});
+			};
+			</script>
+			<script>
+			layui.use(['layer','form'], function() {
+				var $ = layui.jquery,form = layui.form(),layer = layui.layer;
+				//这个是点击之后才添加的。
+				var addBoxIndex = -1;
+				$('#pass').on('click', function() {
+					if(addBoxIndex !== -1)
+						return;
+					//本表单通过ajax加载 --以模板的形式，当然你也可以直接写在页面上读取
+					$.get('<?php echo __URL__;?>index.php/admin/index/myEdit', null, function(form) {
+						addBoxIndex = layer.open({
+							type: 1,
+							title: '修改资料',
+							content: form,
+							btn: ['确认修改', '取消'],
+							shade: false,
+							offset: ['100px', '30%'],
+							area: ['650px', '360px'],
+							zIndex: 19950924,
+							maxmin: true,
+							yes: function(index) {
+								//触发表单的提交事件
+								$('form.layui-form').find('button[lay-filter=edit]').click();
+							},
+							full: function(elem) {
+								var win = window.top === window.self ? window : parent.window;
+								$(win).on('resize', function() {
+									var $this = $(this);
+									elem.width($this.width()).height($this.height()).css({
+										top: 0,
+										left: 0
+									});
+									elem.children('div.layui-layer-content').height($this.height() - 95);
+								});
+							},
+							success: function(layero, index) {
+								//弹出窗口成功后渲染表单
+								var form = layui.form();
+								form.render();
+								form.on('submit(edit)', function(data) {
+									$.ajax({
+					                    type: "POST",
+					                    dataType: "json",
+					                    url: '<?php echo __URL__;?>index.php/admin/server/myEdit',
+					                    data: $('#formEditHandlingFee').serialize(),
+					                    success: function (data) {
+						                     if(data.code == "1"){
+						                    	alert(data.msg);
+						                    	location.href='';
+							                 }else{
+							                	alert(data.msg);
+											 } 
+					                    	
+					                    },
+					                    error: function(data) {
+					                        alert("error:"+data.responseText);
+					                     }
+						 });
+									
+									
+									
+									
+									return false; //阻止表单跳转。						
+								});
+								//console.log(layero, index);
+							},
+							end: function() {
+								addBoxIndex = -1;
+							}
+						});
+					});
+				});
+
+				
+
+			});
+
+	
+			</script>
+		</div>
+	</body>
+
+</html>

@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>商品分类管理</title>
+		<link rel="stylesheet" href="<?php echo __PUBLIC__;?>plugins/layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="<?php echo __PUBLIC__;?>css/global.css?v=1.2" media="all">
+		<link rel="stylesheet" href="<?php echo __PUBLIC__;?>css/table.css" />
+	</head>
+
+	<body>
+		<div class="admin-main">
+
+			<blockquote class="layui-elem-quote">
+				<a href="javascript:;" class="layui-btn layui-btn-small" id="add">
+					<i class="layui-icon">&#xe608;</i> 添加分类 
+				</a>
+				<a href="javascript:;" class="layui-btn layui-btn-small" onclick="checkDelte();">
+					<i class="layui-icon">&#xe640;</i> 删除
+				</a>
+				<a href="javascript:;" class="layui-btn layui-btn-small" onclick="checkFrozen();">
+					<i class="layui-icon">&#xe605;</i> 设置显示
+				</a>
+				<a href="javascript:;" class="layui-btn layui-btn-small" onclick="checkRelieve();">
+					<i class="layui-icon">&#x1006;</i> 设置不显示
+				</a>
+
+			</blockquote>
+				
+
+				
+		
+			<legend><a href='<?php echo __URL__;?>index.php/admin/index/shoprt' class="layui-btn layui-btn-small layui-btn-radius">全部</a>
+			
+			<a href='<?php echo preg_replace("/\/frozen\/[\s\S]+?/", "", geturl());?>/frozen/1' class="layui-btn layui-btn-small layui-btn-warm layui-btn-radius">显示</a>
+			<a href='<?php echo preg_replace("/\/frozen\/[\s\S]+?/", "", geturl());?>/frozen/2' class="layui-btn layui-btn-small layui-btn-warm layui-btn-radius">不显示</a>
+			<span class="layui-btn layui-btn-small layui-btn-radius layui-btn-disabled" style="color:green;font-family:微软雅黑;"> 共计 <?php echo $arrayPage['camiNum'];?> 条记录 </span>
+			</legend>
+			
+			
+		
+			
+				<div class="layui-form">
+					<table class="layui-table admin-table">
+						<thead>
+							<tr>
+								<th style="width: 30px;"><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
+								<th>ID</th>
+								<th>分类名称</th>
+								<th>绑定软件</th>
+								<th>显示状态</th>
+								<th>创建时间</th>
+								<th>操作</th>
+							</tr>
+						</thead>
+						
+						<tbody>
+						<?php  if(empty($data)){echo '<tr><td colspan="7" style="color:green;text-align:center;">没有任何数据..</td></tr>';}?>
+			<?php foreach($data as $db){ ?>
+		  		<tr>
+				<td><input type="checkbox" name="godid" value="<?php echo $db['id'];?>" lay-skin="primary"></td>
+				<td><?php echo $db['id'];?></td>
+				<td style="color: green;font-weight:bold;"><?php echo $db['shoprt_name'];?></td>
+				<td><?php $item = explode(",", $db['shoprt_itemid']); 
+				            $m = '';
+				          for ($i=0;$i<count($item);$i++){
+				              $m .= M("item")->select("id={$item[$i]}")[0]['item_name'] . ',';
+				          }
+				          echo trim($m,","); ?></td>
+				
+				<td><?php echo $db['shoprt_display']==1?'<span style="color:green;">是</span>':'<span style="color:red;">否</span>';?></td>
+				<td><?php echo date("Y-m-d H:i:s",$db['shoprt_time']);?></td>
+				<td>
+				    <a data-id="<?php echo $db['id'];?>" onclick="edit(this)" class="layui-btn layui-btn-mini"> 修改分类 </a>
+					<a href="javascript:;" onclick="if(window.confirm('你确定要删除该数据吗？')){ location.href='<?php echo __URL__;?>index.php/admin/server/pub/action/delete/tpl/shoprt/id/<?php echo $db['id'];?>/url/<?php echo Sendurl();?>'; }else{ return false;}" class="layui-btn layui-btn-danger layui-btn-mini"> 删除分类 </a>
+				</td>
+			    </tr>
+			<?php  if (is_array($db['children'])){ foreach ($db['children'] as $children){  ?>
+			    <tr>
+				<td><input type="checkbox" name="godid" value="<?php echo $children['id'];?>" lay-skin="primary"></td>
+				<td><?php echo $children['id'];?></td>
+				<td style="color: #8487f1;">➛ ✌ <?php echo $children['shoprt_name'];?></td>
+				<td style="color: #8487f1;">继承父类</td>
+				<td><?php echo $children['shoprt_display']==1?'<span style="color:green;">是</span>':'<span style="color:red;">否</span>';?></td>
+				<td><?php echo date("Y-m-d H:i:s",$children['shoprt_time']);?></td>
+				<td>
+			     	<a data-id="<?php echo $children['id'];?>" onclick="edit(this)" class="layui-btn layui-btn-mini"> 修改分类 </a>
+					<a href="javascript:;" onclick="if(window.confirm('你确定要删除该数据吗？')){ location.href='<?php echo __URL__;?>index.php/admin/server/pub/action/delete/tpl/shoprt/id/<?php echo $children['id'];?>/url/<?php echo Sendurl();?>'; }else{ return false;}" class="layui-btn layui-btn-danger layui-btn-mini"> 删除分类 </a>
+				</td>
+			    </tr>
+			
+			<?php } } }?>
+						</tbody>
+					</table>
+				</div>
+		
+
+		<div id="paged" class="page" style="margin-left: 1px;">
+			<div class="layui-box layui-laypage layui-laypage-default">
+				
+				<?php autopage($arrayPage['count'], $arrayPage['page'], 10);?>
+				
+			</div>
+		</div>
+
+	</div>
+		<script type="text/javascript" src="<?php echo __PUBLIC__;?>plugins/layui/layui.js"></script>
+		<script>
+		
+	
+		layui.use('form', function(){
+			  var $ = layui.jquery, form = layui.form(),layer = layui.layer;
+			  
+			  //全选
+			  form.on('checkbox(allChoose)', function(data){
+			    var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
+			    child.each(function(index, item){
+			      item.checked = data.elem.checked;
+			    });
+			    form.render('checkbox');
+			  });
+
+		layui.use(['form', 'layedit', 'laydate'], function(){
+			  var form = layui.form()
+			  ,layer = layui.layer
+			  ,layedit = layui.layedit
+			  ,laydate = layui.laydate;
+			});
+		});
+		
+		//删除选中的
+		  function checkDelte(){//jquery获取复选框值 
+			  layui.use('form', function(){
+				  var $ = layui.jquery,layer = layui.layer;
+				  var chk_value = ''; 
+				  
+				  $('input[name="godid"]:checked').each(function(){ 
+				  chk_value += $(this).val() + ',';
+				  }); 
+				  if(chk_value.length==0){
+					  layer.msg("请选择后再进行操作!");
+				  }else{
+					 location.href='<?php echo __URL__;?>index.php/admin/server/pub/action/delete/tpl/shoprt/id/' + chk_value+'/url/<?php echo Sendurl();?>';
+				  }
+			  
+			  });
+			}
+		
+		//冻结选中的checkFrozen
+		function checkFrozen(){//jquery获取复选框值 
+			  layui.use('form', function(){
+				  var $ = layui.jquery,layer = layui.layer;
+				  var chk_value = ''; 
+				
+				  $('input[name="godid"]:checked').each(function(){ 
+				  chk_value += $(this).val() + ',';
+				  }); 
+				  if(chk_value.length==0){
+					  layer.msg("请选择后再进行操作!");
+				  }else{
+					 location.href='<?php echo __URL__;?>index.php/admin/server/pub/action/update/tpl/shoprt/key/shoprt_display/value/1/id/' + chk_value+'/url/<?php echo Sendurl();?>';
+				  }
+			  
+			  });
+			}
+		//解除冻结的checkRelieve
+		function checkRelieve(){//jquery获取复选框值 
+			  layui.use('form', function(){
+				  var $ = layui.jquery,layer = layui.layer;
+				  var chk_value = ''; 
+				 
+				  $('input[name="godid"]:checked').each(function(){ 
+				  chk_value += $(this).val() + ',';
+				  }); 
+				  if(chk_value.length==0){
+					  layer.msg("请选择后再进行操作!");
+				  }else{
+					 location.href='<?php echo __URL__;?>index.php/admin/server/pub/action/update/tpl/shoprt/key/shoprt_display/value/2/id/' + chk_value+'/url/<?php echo Sendurl();?>';
+				  }
+			  
+			  });
+			}
+
+
+		layui.use(['layer'], function() {
+			var $ = layui.jquery,
+				layer = layui.layer;
+	
+			//这个是点击之后才添加的。
+			var addBoxIndex = -1;
+			$('#add').on('click', function() {
+				if(addBoxIndex !== -1)
+					return;
+				//本表单通过ajax加载 --以模板的形式，当然你也可以直接写在页面上读取
+				$.get('<?php echo __URL__;?>index.php/admin/index/addshoprt', null, function(form) {
+					addBoxIndex = layer.open({
+						type: 1,
+						title: '添加分销商',
+						content: form,
+						btn: ['确认添加', '取消'],
+						shade: false,
+						offset: ['100px', '30%'],
+						area: ['650px', '380px'],
+						zIndex: 19950924,
+						maxmin: true,
+						yes: function(index) {
+							//触发表单的提交事件
+							$('form.layui-form').find('button[lay-filter=edit]').click();
+						},
+						full: function(elem) {
+							var win = window.top === window.self ? window : parent.window;
+							$(win).on('resize', function() {
+								var $this = $(this);
+								elem.width($this.width()).height($this.height()).css({
+									top: 0,
+									left: 0
+								});
+								elem.children('div.layui-layer-content').height($this.height() - 95);
+							});
+						},
+						success: function(layero, index) {
+							//弹出窗口成功后渲染表单
+							var form = layui.form();
+							form.render();
+							form.on('submit(edit)', function(data) {
+								$.ajax({
+				                    type: "POST",
+				                    dataType: "json",
+				                    url: '<?php echo __URL__;?>index.php/admin/server/Addshoprt',
+				                    data: $('#formAddHandlingFee').serialize(),
+				                    success: function (data) {
+					                     if(data.code == "1"){
+					                    	layer.msg("添加成功");
+					                    	location.href='';
+						                 }else{
+						                	alert(data.msg);
+										 } 
+				                    	
+				                    },
+				                    error: function(data) {
+				                        alert("error:"+data.responseText);
+				                     }
+					 });
+								
+								
+								
+								
+								return false; //阻止表单跳转。						
+							});
+							//console.log(layero, index);
+						},
+						end: function() {
+							addBoxIndex = -1;
+						}
+					});
+				});
+			});
+
+			
+
+		});
+
+		//这个是点击之后才添加的。
+		 function edit(data) {
+			 //获取当前ID
+			 
+			 
+			 layui.use(['layer'], function() {
+					var $ = layui.jquery,
+						layer = layui.layer;
+					//这个是点击之后才添加的。
+					var addBoxIndex = -1;
+					var vid = data.attributes['data-id'].nodeValue;
+					if(addBoxIndex !== -1)
+							return;
+						//本表单通过ajax加载 --以模板的形式，当然你也可以直接写在页面上读取
+						$.get('<?php echo __URL__;?>index.php/admin/index/editshoprt/id/'+vid, null, function(form) {
+							addBoxIndex = layer.open({
+								type: 1,
+								title: '修改商品分类',
+								content: form,
+								btn: ['确认修改', '取消'],
+								shade: false,
+								offset: ['100px', '30%'],
+								area: ['650px', '390px'],
+								zIndex: 19950924,
+								maxmin: true,
+								yes: function(index) {
+									//触发表单的提交事件
+									$('form.layui-form').find('button[lay-filter=edit]').click();
+								},
+								full: function(elem) {
+									var win = window.top === window.self ? window : parent.window;
+									$(win).on('resize', function() {
+										var $this = $(this);
+										elem.width($this.width()).height($this.height()).css({
+											top: 0,
+											left: 0
+										});
+										elem.children('div.layui-layer-content').height($this.height() - 95);
+									});
+								},
+								success: function(layero, index) {
+									//弹出窗口成功后渲染表单
+									var form = layui.form();
+									form.render();
+									form.on('submit(edit)', function(data) {
+										$.ajax({
+						                    type: "POST",
+						                    dataType: "json",
+						                    url: '<?php echo __URL__;?>index.php/admin/server/Editshoprt/id/'+vid,
+						                    data: $('#formEditHandlingFee').serialize(),
+						                    success: function (data) {
+							                     if(data.code == "1"){
+							                    	layer.msg("修改成功");
+							                    	location.href='';
+								                 }else{
+								                	alert(data.msg);
+								                	location.href='';
+												 } 
+						                    	
+						                    },
+						                    error: function(data) {
+						                        alert("error:"+data.responseText);
+						                     }
+							 });
+										
+										return false; //阻止表单跳转。						
+									});
+									//console.log(layero, index);
+								},
+								end: function() {
+									addBoxIndex = -1;
+								}
+							});
+						});
+					
+
+					
+
+				});
+			
+			 
+
+		};
+	
+			
+		</script>
+	
+	</body>
+</html>

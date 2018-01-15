@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="UTF-8">
+<title>全局设置</title>
+<link rel="stylesheet"
+	href="<?php echo __PUBLIC__;?>plugins/layui/css/layui.css" media="all" />
+<link rel="stylesheet"
+	href="<?php echo __PUBLIC__;?>css/global.css?v=1.2" media="all">
+<link rel="stylesheet" href="<?php echo __PUBLIC__;?>css/table.css" />
+</head>
+
+<body>
+	<div class="admin-main">
+
+		<!-- <blockquote class="layui-elem-quote">
+			<a href="javascript:;" class="layui-btn layui-btn-small" id="add"> <i
+				class="layui-icon">&#x1002;</i> 更新配置
+			</a>
+		</blockquote> -->
+		<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+			<ul class="layui-tab-title">
+				<li class="layui-this">网站设置</li>
+				<li>邮箱接口</li>
+				<li>商家配置</li>
+				<li>手机接口</li>
+			</ul>
+			<div class="layui-tab-content" style="height: 100px;">
+				<div class="layui-tab-item layui-show">
+
+					<div style="margin: 15px;">
+					
+                        <div class="layui-form-item">
+							<label class="layui-form-label">网站名称</label>
+							<div class="layui-input-block">
+								<input dtype="text" data-key="settings_title"
+									onchange="edit(this);"
+									value="<?php echo $settings['settings_title'];?>"
+									placeholder="用于显示在浏览器标题的名称.." class="layui-input">
+							</div>
+						</div>
+
+						<div class="layui-form-item">
+							<label class="layui-form-label">IP黑名单</label>
+							<div class="layui-input-block">
+								<textarea onchange="edit(this);" data-key="settings_blacklist"
+									placeholder="每个IP用换行符分隔.." class="layui-textarea"><?php echo $settings['settings_blacklist'];?></textarea>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">账户位数</label>
+							<div class="layui-input-block">
+								<input type="text" data-key="settings_regNum"
+									onchange="edit(this);"
+									value="<?php echo $settings['settings_regNum'];?>"
+									placeholder="用户注册账户至少输入几位字符串..." class="layui-input">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">密码位数</label>
+							<div class="layui-input-block">
+								<input type="text" data-key="settings_regPnum"
+									onchange="edit(this);"
+									value="<?php echo $settings['settings_regPnum'];?>"
+									placeholder="用户注册密码至少输入几位字符串..." class="layui-input">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">管理QQ号</label>
+							<div class="layui-input-block">
+								<input type="text" data-key="settings_qq" onchange="edit(this);"
+									value="<?php echo $settings['settings_qq'];?>"
+									placeholder="全局QQ号,管理员的QQ号..." class="layui-input">
+							</div>
+						</div>
+
+					</div>
+				</div>
+				<div class="layui-tab-item">
+					<div style="margin: 15px;">
+						<div class="layui-form-item">
+							<label class="layui-form-label">SMTP地址</label>
+							<div class="layui-input-block">
+								<input type="text" data-key="settings_smtpServer" onchange="edit(this);" value="<?php echo $settings['settings_smtpServer'];?>"placeholder="邮箱SMTP服务器地址" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">SMTP端口</label>
+							<div class="layui-input-block">
+								<input type="text" data-key="settings_smtpPort" onchange="edit(this);" value="<?php echo $settings['settings_smtpPort'];?>"placeholder="邮箱SMTP服务器端口" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">邮箱账户</label>
+							<div class="layui-input-block">
+								<input type="text" data-key="settings_smtpUser" onchange="edit(this);" value="<?php echo $settings['settings_smtpUser'];?>"placeholder="邮箱SMTP服务器账号" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">邮箱密码</label>
+							<div class="layui-input-block">
+								<input type="text" data-key="settings_smtpPass" onchange="edit(this);" value="<?php echo $settings['settings_smtpPass'];?>"placeholder="邮箱SMTP服务器密码" class="layui-input">
+							</div>
+						</div>
+						
+						<div class="layui-form-item">
+							<div class="layui-input-block">
+							<button class="layui-btn layui-btn-small layui-btn-normal" onclick="emailc();">通信测试</button>
+							</div>
+						</div>
+						
+					</div>
+				</div>
+				<div class="layui-tab-item"><div style="margin: 15px;">
+				        <div class="layui-form-item">
+							<label class="layui-form-label">提现手续费</label>
+							<div class="layui-input-block">
+								<textarea onchange="edit(this);" data-key="settings_counter"
+									placeholder="提现手续费用,从小到大排序,换行分割" class="layui-textarea"><?php echo $settings['settings_counter'];?></textarea>
+							</div>
+						</div>
+						
+						<div class="layui-form-item">
+							<label class="layui-form-label">提现额度</label>
+							<div class="layui-input-block">
+								<input type="text" data-key="settings_mixdep" onchange="edit(this);" value="<?php echo $settings['settings_mixdep'];?>"placeholder="提现最小额度.." class="layui-input">
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">免签约KEY</label>
+							<div class="layui-input-block">
+								<input type="text" data-key="settings_paykey" onchange="edit(this);" value="<?php echo $settings['settings_paykey'];?>"placeholder="请自己定义一个KEY,用作与免签约软件上..." class="layui-input">
+							</div>
+						</div>
+						
+						
+				</div></div>
+				
+				<div class="layui-tab-item"><div style="margin: 15px;">
+				        <div class="layui-form-item">
+							<label class="layui-form-label">短信接口</label>
+							<div class="layui-input-block">
+								<textarea onchange="edit(this);" data-key="settings_mobile" class="layui-textarea"><?php echo $settings['settings_mobile'];?></textarea>
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label class="layui-form-label">接口须知</label>
+							<div class="layui-input-block">
+							  <p>1. [pus] = GET数据分解符,不支持?号来表示,请将?号全部替换成 [pus]</p>
+							  <p>2. [mobile] = 手机号标签,请在你的接口里将手机收信人改成 [mobile]</p>
+							  <p>3. [content] = 短信内容,请在你的接口的内容里，短信内容替换成 [content]</p>
+								</div>
+						</div>
+						
+						
+						
+						
+				</div></div>
+		
+
+			</div>
+
+		</div>
+
+
+	</div>
+	<script type="text/javascript"
+		src="<?php echo __PUBLIC__;?>plugins/layui/layui.js"></script>
+
+	<script>
+function edit(data){
+	layui.use('element', function(){
+		  var $ = layui.jquery,layer = layui.layer; //载入jq
+		  var key = $(data).attr('data-key');
+		  var value = $(data).val();
+		  value = value.replace(/[\r\n]/g,"-");
+		  value = value.replace(/\//g,"_");
+		  $.get('<?php echo __URL__;?>index.php/admin/server/pub/action/update/tpl/settings/key/'+key+'/value/'+value+'/id/1', function(result){
+			  layer.msg('自动更新保存完毕..');
+			  });
+		});
+	
+}
+
+function emailc(){
+	layui.use('element', function(){
+		  var $ = layui.jquery,layer = layui.layer; //载入jq
+		  layer.msg('开始测试..');
+		  $.get('<?php echo __URL__;?>index.php/admin/server/emailc', function(result){
+			  if(result.code=='1'){
+				  layer.msg(result.msg);
+				  }else{
+				  layer.msg(result.msg);
+				}
+			  });
+		});
+}
+       	
+layui.use('element', function(){
+  var $ = layui.jquery
+  ,element = layui.element(); //Tab的切换功能，切换事件监听等，需要依赖element模块
+});
+layui.use(['form', 'layedit', 'laydate'], function(){
+	  var form = layui.form()
+	  ,layer = layui.layer
+	  ,layedit = layui.layedit
+	  ,laydate = layui.laydate;
+	  });
+layui.use(['layer'], function() {
+	var $ = layui.jquery,
+		layer = layui.layer;
+});
+
+</script>
+
+
+
+</body>
+
+</html>

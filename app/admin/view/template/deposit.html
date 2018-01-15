@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>提现管理</title>
+		<link rel="stylesheet" href="<?php echo __PUBLIC__;?>plugins/layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="<?php echo __PUBLIC__;?>css/global.css?v=1.2" media="all">
+		<link rel="stylesheet" href="<?php echo __PUBLIC__;?>css/table.css" />
+	</head>
+
+	<body>
+		<div class="admin-main">
+
+			<blockquote class="layui-elem-quote">
+				
+				<a href="javascript:;" class="layui-btn layui-btn-small" onclick="checkDelte();">
+					<i class="layui-icon">&#xe640;</i> 删除
+				</a>
+				<a href="javascript:;" class="layui-btn layui-btn-small" onclick="checkFrozen();">
+					<i class="layui-icon">&#xe605;</i> 确认到账
+				</a>
+				<a href="javascript:;" class="layui-btn layui-btn-small" onclick="checkRelieve();">
+					<i class="layui-icon">&#x1006;</i> 取消到账
+				</a>
+	<a href="javascript:;" class="layui-btn layui-btn-small" id="timeserach">
+					<i class="layui-icon">&#xe628;</i> 查申请时间
+				</a>
+				
+			
+				<div class="layui-input-inline">
+						<input type="text" id="soText" value="<?php echo get('search');?>" placeholder="流水单号.." class="layui-input">
+				</div>
+				<a href="javascript:;" onclick="var ts = document.getElementById('soText').value;if(ts){location.href='<?php echo __URL__;?>index.php/admin/index/deposit/search/' + ts;}else{location.href='<?php echo __URL__;?>index.php/admin/index/deposit';}" class="layui-btn layui-btn-small">
+					<i class="layui-icon">&#xe615;</i> 查询
+				</a>
+			</blockquote>
+				
+
+				
+		
+			<legend><a href='<?php echo __URL__;?>index.php/admin/index/deposit' class="layui-btn layui-btn-small layui-btn-radius">全部</a>
+			
+			<a href='<?php echo preg_replace("/\/frozen\/[\s\S]+?/", "", geturl());?>/frozen/1' class="layui-btn layui-btn-small layui-btn-warm layui-btn-radius">已到账</a>
+			<a href='<?php echo preg_replace("/\/frozen\/[\s\S]+?/", "", geturl());?>/frozen/2' class="layui-btn layui-btn-small layui-btn-warm layui-btn-radius">未到账</a>
+			<a onclick="if(window.confirm('你确定要清空当前分类的所有用户吗?这是不可恢复的!')){ location.href='<?php echo __URL__;?>index.php/admin/server/Emptydeposit/url/<?php echo Sendurl();?>/frozen/<?php echo get('frozen');?>'; }else{ return false;}" class="layui-btn layui-btn-small layui-btn-radius">清空该分类</a>
+			<a href="<?php echo __URL__;?>index.php/admin/server/Downdeposit" class="layui-btn layui-btn-small layui-btn-radius">导出账单</a>
+			<span class="layui-btn layui-btn-small layui-btn-radius layui-btn-disabled" style="color:green;font-family:微软雅黑;"> 共计 <?php echo $arrayPage['camiNum'];?> 条记录 </span>
+			</legend>
+			
+			
+		
+			
+				<div class="layui-form">
+					<table class="layui-table admin-table">
+						<thead>
+							<tr>
+								<th style="width: 30px;"><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
+								<th>流水号</th>
+								<th>用户名</th>
+								<th>申请日期</th>
+								<th>申请金额</th>
+								<th>手续费</th>
+								<th>实际到账</th>
+								<th>到账日期</th>
+								<th>收款信息</th>
+								<th>申请人</th>
+								<th>账单状态</th>
+								<th>操作</th>
+							</tr>
+						</thead>
+						
+						<tbody>
+						<?php  if(empty($data)){echo '<tr><td colspan="12" style="color:green;text-align:center;">没有任何数据..</td></tr>';}?>
+						<?php foreach($data as $db){?>
+		  		<tr>
+				<td><input type="checkbox" name="godid" value="<?php echo $db['id'];?>" lay-skin="primary"></td>
+				<td><?php echo $db['deposit_serial'];?></td>
+				<td><?php echo $db['deposit_username'];?></td>
+				<td><?php echo date("Y-m-d H:i:s",$db['deposit_ctime']);?></td>
+				<td><?php echo $db['deposit_moeny'];?></td>
+				<td><?php echo $db['deposit_counter']." ({$db['deposit_percent']})";?></td>
+				<td style="color: green;font-weight:bold;"><?php echo $db['deposit_send'];?></td>
+				<td><?php echo $db['deposit_dtime']==0?'还未处理':date("Y-m-d H:i:s",$db['deposit_dtime']);?></td>
+				<td><?php echo $db['deposit_paytype']." ({$db['deposit_paym']}) ";?></td>
+				<td><?php echo $db['deposit_cpname'];?></td>
+				<td><?php echo $db['deposit_state']==1?'<span style="color:green;">已经处理</span>':'<span style="color:red;">暂未处理</span>';?></td>
+				<td>
+					<a href="javascript:;" onclick="if(window.confirm('你确定要删除该数据吗？')){ location.href='<?php echo __URL__;?>index.php/admin/server/pub/action/delete/tpl/deposit/id/<?php echo $db['id'];?>/url/<?php echo Sendurl();?>'; }else{ return false;}" class="layui-btn layui-btn-danger layui-btn-mini">删除数据</a>
+				</td>
+			</tr><?php }?>
+						</tbody>
+					</table>
+				</div>
+		
+
+		<div id="paged" class="page" style="margin-left: 1px;">
+			<div class="layui-box layui-laypage layui-laypage-default">
+				
+				<?php autopage($arrayPage['count'], $arrayPage['page'], 10);?>
+				
+			</div>
+		</div>
+
+	</div>
+		<script type="text/javascript" src="<?php echo __PUBLIC__;?>plugins/layui/layui.js"></script>
+		<script>
+		
+		layui.use(['layer'], function() {
+			var $ = layui.jquery,
+				layer = layui.layer;
+			//这个是点击之后才添加的。
+	
+			$('#timeserach').on('click', function() {
+				 var con = '<div style="padding:10px;"><input type="text" id="TimeID" lay-verify="date" placeholder="yyyy-mm-dd" value="<?php echo get('TimeID');?>" autocomplete="off" class="layui-input" onclick="layui.laydate({elem: this})"></div>';
+					
+					layer.open({
+						type: 1,
+						title: '申请日期查询',
+						content: con,
+						btn: ['开始查询', '取消查询'],
+						area: ['350px', '160px'],
+						yes: function(index, layero) {
+							var TimeID = $('#TimeID').val();
+							location.href='<?php echo __URL__;?>index.php/admin/index/deposit/TimeID/'+TimeID;
+						},
+						shade :false,
+						maxmin :true
+					}); 
+
+			});
+
+			
+
+		});
+		
+		
+		
+		layui.use('form', function(){
+			  var $ = layui.jquery, form = layui.form(),layer = layui.layer;
+			  
+			  //全选
+			  form.on('checkbox(allChoose)', function(data){
+			    var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
+			    child.each(function(index, item){
+			      item.checked = data.elem.checked;
+			    });
+			    form.render('checkbox');
+			  });
+
+		layui.use(['form', 'layedit', 'laydate'], function(){
+			  var form = layui.form()
+			  ,layer = layui.layer
+			  ,layedit = layui.layedit
+			  ,laydate = layui.laydate;
+			});
+		});
+		
+		//删除选中的
+		  function checkDelte(){//jquery获取复选框值 
+			  layui.use('form', function(){
+				  var $ = layui.jquery,layer = layui.layer;
+				  var chk_value = ''; 
+				  
+				  $('input[name="godid"]:checked').each(function(){ 
+				  chk_value += $(this).val() + ',';
+				  }); 
+				  if(chk_value.length==0){
+					  layer.msg("请选择后再进行操作!");
+				  }else{
+					 location.href='<?php echo __URL__;?>index.php/admin/server/pub/action/delete/tpl/deposit/id/' + chk_value+'/url/<?php echo Sendurl();?>';
+				  }
+			  
+			  });
+			}
+		
+		//冻结选中的checkFrozen
+		function checkFrozen(){//jquery获取复选框值 
+			  layui.use('form', function(){
+				  var $ = layui.jquery,layer = layui.layer;
+				  var chk_value = ''; 
+				
+				  $('input[name="godid"]:checked').each(function(){ 
+				  chk_value += $(this).val() + ',';
+				  }); 
+				  if(chk_value.length==0){
+					  layer.msg("请选择后再进行操作!");
+				  }else{
+					 location.href='<?php echo __URL__;?>index.php/admin/server/pub/action/update/tpl/deposit/key/deposit_state+deposit_dtime/value/1+time/id/' + chk_value+'/url/<?php echo Sendurl();?>';
+				  }
+			  
+			  });
+			}
+		//解除冻结的checkRelieve
+		function checkRelieve(){//jquery获取复选框值 
+			  layui.use('form', function(){
+				  var $ = layui.jquery,layer = layui.layer;
+				  var chk_value = ''; 
+				 
+				  $('input[name="godid"]:checked').each(function(){ 
+				  chk_value += $(this).val() + ',';
+				  }); 
+				  if(chk_value.length==0){
+					  layer.msg("请选择后再进行操作!");
+				  }else{
+					 location.href='<?php echo __URL__;?>index.php/admin/server/pub/action/update/tpl/deposit/key/deposit_state+deposit_dtime/value/2+0/id/' + chk_value+'/url/<?php echo Sendurl();?>';
+				  }
+			  
+			  });
+			}
+	
+			
+		</script>
+	
+	</body>
+
+</html>

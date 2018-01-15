@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<link rel="stylesheet" href="<?php echo __PUBLIC__;?>plugins/layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="<?php echo __PUBLIC__;?>css/main.css" />
+	</head>
+
+	<body>
+		<div class="admin-main">
+			<blockquote class="layui-elem-quote" style="font-size: 13px;">
+				<!--<p>软件版本：<span style="color:red;">GOD 正式版 v1.0.0</span></p>-->
+				<p>当前域名：<?php echo $_SERVER['SERVER_NAME'];?></p>
+				<p>登录IP：<?php echo getip();?></p>
+				<p>PHP版本: <?php echo PHP_VERSION;?> 服务器操作系统: <?php echo PHP_OS;?></p>
+				<p>服务器引擎: <?php echo $_SERVER['SERVER_SOFTWARE'];?></p>
+				<p>MYSQL版本: <?php echo M('manage')->sql("select VERSION() as version")[0]['version'];?></p>
+				<p>服务器时间: <?php echo date("Y-m-d H:i:s",time());?></p>
+				<br/>
+				<!--<p style="color: #01AAED;">务必添加QQ群:637383811（关注新版本新动向）</p>-->
+			</blockquote>
+		
+				
+				<div  style="font-size: 13px;">
+					<fieldset class="layui-elem-field layui-field-title">
+						<legend>版本号: v1.0.0 2017-6-6</legend>
+						<div class="layui-field-box">
+							<p>1、全新自定义框架，多线程分布式数据读取</p>			
+							<p>2、所有数据通过加密传输，安全稳定。</p>
+							<p>3、独立的三种运营模式，两种登录方式。</p>
+							<p>4、全新的商城系统，自动发货，手动发货，全部支持。</p>
+							<p>5、友好的API支持，你可以对接任何一门语言。</p>
+							<p>6、强大的数据库引擎支撑，100万数据只需要1秒!</p>
+							<p>7、顶级的动态数据加密系统，让你的数据无人能破!</p>
+						</div>
+					</fieldset>
+					
+				</div>
+			
+		</div>
+	</body>
+
+</html>

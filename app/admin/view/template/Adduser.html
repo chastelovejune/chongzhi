@@ -1,0 +1,52 @@
+<div style="margin: 15px;">
+	<form class="layui-form" id="formAddHandlingFee">
+		<div class="layui-form-item">
+			<label class="layui-form-label">绑定软件</label>
+			<div class="layui-input-block">
+			<select name="user_itemid" lay-filter="aihao">
+							<option value="0">通用(所有软件支持登录)</option>
+							<?php foreach($item as $it){?>
+							<option value="<?php echo $it['id']?>"><?php echo $it['item_name']?> (ID:<?php echo $it['id']?>)</option>
+							<?php }?>
+			</select>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">用户名</label>
+			<div class="layui-input-block">
+				<input type="text" name="user_username" placeholder="用户名.." class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">密  码</label>
+			<div class="layui-input-block">
+			<input type="password" name="password" placeholder="密码.." class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">安全密码</label>
+			<div class="layui-input-block">
+			<input type="password" name="user_passwordsec" placeholder="安全密码.." class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">手机号码</label>
+			<div class="layui-input-block">
+				<input type="text" name="user_mobile" placeholder="每个软件手机号码不能重复.." class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">邮箱账户</label>
+			<div class="layui-input-block">
+				<input type="text" name="user_email" placeholder="每个软件邮箱不能重复.." class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">账户(BUY)</label>
+			<div class="layui-input-block">
+				<input type="text" name="user_account" placeholder="请输入一个数值预充值,0为不预充值.." class="layui-input">
+			</div>
+		</div>
+		<button lay-filter="edit" lay-submit style="display: none;"></button>
+	</form>
+</div>

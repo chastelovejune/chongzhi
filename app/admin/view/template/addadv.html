@@ -1,0 +1,75 @@
+﻿<div style="margin: 15px;">
+	<form class="layui-form" id="formAddHandlingFee">
+		<div class="layui-form-item">
+			<label class="layui-form-label">广告名称</label>
+			<div class="layui-input-block">
+				<input type="text" name="name" placeholder="广告名称.." class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">广告链接</label>
+			<div class="layui-input-block">
+			<input type="text" name="url" placeholder="广告链接.." class="layui-input">
+			<span>注：需加上http://</span>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">上传广告</label>
+			<div class="layui-input-block">
+				<input type="file" name="path" placeholder="上传广告.." class="layui-input button_pic">
+				<img src="" alt="" width="100" height="100" style="display: none">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">广告类型</label>
+			<div class="layui-input-block">
+				<select name="type">
+					<option value="">--请选择--</option>
+					<option value="1">启动图</option>
+					<option value="2">平台下载</option>
+					<option value="3">游戏下载</option>
+					<option value="4">首页轮播图</option>
+				</select>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">排序</label>
+			<div class="layui-input-block">
+				<input type="text" name="sort" placeholder="排序.." class="layui-input">
+			</div>
+		</div>
+		<button lay-filter="edit" lay-submit style="display: none;"></button>
+	</form>
+</div>
+<script>
+	/*图片上传预览*/
+    $(function(){
+        $('.button_pic').change(function(){
+            var pic_data = (this.files[0]);
+            var pic_name = pic_data.name;
+            var objUrl = getObjectUrl(pic_data);
+
+            if(objUrl){
+                $(this).next('img').attr('src',objUrl);
+                $(this).next('img').css('display','block');
+                $(this).onload = function(){
+                    window.URL.revokeObjectURL(objUrl);
+                };
+            }
+        });
+
+        function getObjectUrl(file){
+            var url = null;
+            // 下面函数执行的效果是一样的，只是需要针对不同的浏览器执行不同的 js 函数而已
+            if (window.URL.createObjectURL!=undefined) {    // basic
+                url = window.URL.createObjectURL(file) ;
+            } else if (window.URL!=undefined) {             // mozilla(firefox)
+                url = window.URL.createObjectURL(file) ;
+            } else if (window.webkitURL!=undefined) {       // webkit or chrome
+                url = window.webkitURL.createObjectURL(file) ;
+            }
+            return url ;
+        }
+    });
+
+</script>

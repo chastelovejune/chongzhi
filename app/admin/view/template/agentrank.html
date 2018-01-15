@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>分销商等级</title>
+		<link rel="stylesheet" href="<?php echo __PUBLIC__;?>plugins/layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="<?php echo __PUBLIC__;?>css/global.css" media="all">
+		<link rel="stylesheet" href="<?php echo __PUBLIC__;?>css/table.css" />
+	</head>
+
+	<body>
+		<div class="admin-main">
+
+			<blockquote class="layui-elem-quote">
+				<a href="javascript:;" class="layui-btn layui-btn-small" id="add">
+					<i class="layui-icon">&#xe608;</i> 添加等级规则
+				</a>
+			</blockquote>
+			
+				
+				
+					<table class="layui-table admin-table">
+						<thead>
+							<tr>
+								<th style="width: 50px;">ID</th>
+								<th>等级名称</th>
+								<th>规则</th>
+								<th>操作</th>
+							</tr>
+						</thead>
+						<tbody>
+						<?php  if(empty($data)){echo '<tr><td colspan="4" style="color:green;text-align:center;">没有任何数据..</td></tr>';}?>
+						<?php foreach($data as $db){?>
+		  <tr>
+				<td><?php echo $db['id'];?></td>
+				<td><?php echo $db['agentrank_name'];?></td>
+				<td><?php echo str_replace("\n","<br>",$db['agentrank_rule']);?></td>
+				<td>
+					<a data-id="<?php echo $db['id'];?>" onclick="edit(this)" class="layui-btn layui-btn-mini">修改</a>
+					<a href="javascript:;" onclick="if(window.confirm('你确定要删除吗？')){ location.href='<?php echo __URL__;?>index.php/admin/server/Deleteagentrank/id/<?php echo $db['id'];?>'; }else{ return false;}" class="layui-btn layui-btn-danger layui-btn-mini">删除</a>
+				</td>
+			</tr><?php }?>
+						</tbody>
+					</table>
+				
+			
+			<div id="paged" class="page" style="margin-left: 1px;">
+			<div class="layui-box layui-laypage layui-laypage-default">
+
+				<?php autopage($arrayPage['count'], $arrayPage['page'], 10);?>
+				
+			</div>
+		</div>
+		</div>
+		<script type="text/javascript" src="<?php echo __PUBLIC__;?>plugins/layui/layui.js"></script>
+		<script>
+		
+
+		//这个是点击之后才添加的。
+		 function edit(data) {
+			 layui.use(['layer'], function() {
+
+					var $ = layui.jquery,
+					layer = layui.layer;
+					var vid = data.attributes['data-id'].nodeValue;
+					$.get("<?php echo __URL__;?>index.php/admin/server/Viewagentrank/id/"+vid,function(data,status){
+						var agentrank_name = data.data[0].agentrank_name;
+						var agentrank_rule = data.data[0].agentrank_rule;
+						var con = '<form id="formEditHandlingFee"><div style="padding:10px;"><input type="text" class="layui-input" style="margin-bottom:5px;" name="agentrank_name" value="'+agentrank_name+'" />'+
+						'<textarea name="agentrank_rule" class="layui-textarea" rows="13">'+agentrank_rule+'</textarea>'+
+						'</div></form>';
+
+						layer.open({
+							type: 1,
+							title: '修改等级规则',
+							content: con,
+							btn: ['确定修改', '取消'],
+							area: ['350px', '450px'],
+							yes: function(index, layero) {
+		
+								$.ajax({
+						                    type: "POST",
+						                    dataType: "json",
+						                    url: '<?php echo __URL__;?>index.php/admin/server/Editagentrank/id/'+vid,
+						                    data: $('#formEditHandlingFee').serialize(),
+						                    success: function (data) {
+							                     if(data.code == "1"){
+							                    	layer.msg("修改成功");
+							                    	location.href='';
+								                 }else{
+								                	layer.msg("失败");
+								                	location.href='';
+												 } 
+						                    	
+						                    },
+						                    error: function(data) {
+						                        alert("error:"+data.responseText);
+						                     }
+							 });
+					
+							},
+							shade :false,
+							maxmin :true
+						});
+						
+					});
+					
+			 });
+
+		};
+		
+		
+		
+		
+			layui.use(['layer'], function() {
+				var $ = layui.jquery,
+					layer = layui.layer;
+				//这个是点击之后才添加的。
+				$('#add').on('click', function() {
+					
+	
+					
+					 var con = '<form id="formAddHandlingFee"><div style="padding:10px;"><input type="text" class="layui-input" style="margin-bottom:5px;" name="agentrank_name" placeholder="等级名称,如:总代理商.." /><textarea name="agentrank_rule" rows="13" placeholder="请输入等级规则:如:\n0,0.8\n20,0.7\n50,0.6" class="layui-textarea"></textarea><div style="margin-top:10px;">规则解释,比如（100,0.8）那么就是购买超过100元的话就是100元乘以0.8来算出分销商的购买充值卡的价格,每条规则需要换行即可,注意,必须按照价格低高来分,否则系统无法识别规则.</div></div></form>';
+						
+						layer.open({
+							type: 1,
+							title: '添加等级',
+							content: con,
+							btn: ['确定添加', '关闭'],
+							area: ['350px', '530px'],
+							yes: function(index, layero) {
+								$.ajax({
+						                    type: "POST",
+						                    dataType: "json",
+						                    url: '<?php echo __URL__;?>index.php/admin/server/Addagentrank',
+						                    data: $('#formAddHandlingFee').serialize(),
+						                    success: function (data) {
+							                     if(data.code == "1"){
+							                    	layer.msg("添加成功");
+							                    	location.href='';
+								                 }else{
+								                	layer.msg("添加失败");
+								                	location.href='';
+												 } 
+						                    	
+						                    },
+						                    error: function(data) {
+						                        alert("error:"+data.responseText);
+						                     }
+							 });
+					
+							},
+							shade :false,
+							maxmin :true
+						}); 
+
+				});
+
+				
+
+			});
+			
+			
+		</script>
+	
+	</body>
+
+</html>

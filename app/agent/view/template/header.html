@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<?php 
+	//获取USER信息
+	$userDB = M("agent");
+	$setDB = M("settings");
+	$username = decrypt(cookie("_u_agent"),"hello","mengi");//取出用户名
+	$user = $userDB->select("agent_username='{$username}'")[0];//获取数据库
+	$set = $setDB->select("id=1")[0];
+	?>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title><?php echo $set['settings_title'];?> - 分销商管理后台</title>
+	<link rel="stylesheet" href="<?php echo __PUBLIC__;?>assets/js/jquery-ui/css/no-theme/jquery-ui-1.10.3.custom.min.css">
+	<link rel="stylesheet" href="<?php echo __PUBLIC__;?>assets/css/font-icons/entypo/css/entypo.css">
+	<link rel="stylesheet" href="<?php echo __PUBLIC__;?>assets/css/bootstrap.css">
+	<link rel="stylesheet" href="<?php echo __PUBLIC__;?>assets/css/neon-core.css?v=1.0">
+	<link rel="stylesheet" href="<?php echo __PUBLIC__;?>assets/css/neon-theme.css">
+	<link rel="stylesheet" href="<?php echo __PUBLIC__;?>assets/css/neon-forms.css?v=1.0">
+	<link rel="stylesheet" href="<?php echo __PUBLIC__;?>assets/css/custom.css">
+	<script src="<?php echo __PUBLIC__;?>assets/js/jquery-1.11.0.min.js"></script>
+	<script>$.noConflict();</script>
+</head>
+<body class="page-body">
+<div class="page-container">
+	
+	<div class="sidebar-menu">
+
+		<div class="sidebar-menu-inner">
+			
+			<header class="logo-env">
+
+				<!-- logo -->
+				<div class="logo">
+					<a>
+						<img src="<?php echo __PUBLIC__;?>assets/images/logox.png" width="120" alt="" />
+					</a>
+				</div>
+
+				<!-- logo collapse icon -->
+				<div class="sidebar-collapse">
+					<a href="#" class="sidebar-collapse-icon">
+						<i class="entypo-menu"></i>
+					</a>
+				</div>
+
+				<div class="sidebar-mobile-menu visible-xs">
+					<a href="#" class="with-animation">
+						<i class="entypo-menu"></i>
+					</a>
+				</div>
+
+			</header>
+			
+									
+			<ul id="main-menu" class="main-menu">
+			    <li <?php if (__ACTION__ == 'home') echo 'class="active"';?> >
+					<a href="<?php echo __URL__;?>index.php/agent/index/home">
+						<i class="entypo-gauge"></i>
+						<span class="title">个人中心</span>
+					</a>
+				</li>
+				<?php if ($user['agent_power'] == 1){?>
+				<li <?php if (__ACTION__ == 'myprofit') echo 'class="active"';?>>
+					<a href="<?php echo __URL__;?>index.php/agent/index/myprofit">
+						<i class="entypo-github"></i>
+						<span class="title">下级代理</span>
+					</a>
+				</li>
+				<?php }?>
+				<li <?php if (__ACTION__ == 'mycard') echo 'class="active"';?>>
+					<a href="<?php echo __URL__;?>index.php/agent/index/mycard">
+						<i class="entypo-rdio"></i>
+						<span class="title">充值卡</span>
+					</a>
+				</li>
+				<li>
+					<a href="<?php echo __URL__;?>index.php/agent/index/help">
+						<i class="entypo-help-circled"></i>
+						<span class="title">帮助文档</span>
+					</a>
+				</li>
+				
+			</ul>
+			
+		</div>
+
+	</div>
+
+	<div class="main-content">
+				
+		<div class="row">
+		
+			<!-- Profile Info and Notifications -->
+			<div class="col-md-6 col-sm-8 clearfix">
+		
+				<ul class="user-info pull-left pull-none-xsm">
+		
+					<!-- Profile Info -->
+					<li class="profile-info dropdown"><!-- add class "pull-right" if you want to place this from right -->
+		
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+							<img src="http://q1.qlogo.cn/g?b=qq&nk=<?php echo $user['agent_qq'];?>&s=160" class="img-circle" width="44" />
+							<?php echo $user['agent_username'];?>
+						</a>
+		
+						
+					</li>
+		
+				</ul>
+				
+			</div>
+		
+		
+			<!-- Raw Links -->
+			<div class="col-md-6 col-sm-4 clearfix hidden-xs">
+		
+				<ul class="list-inline links-list pull-right">
+		
+					<!-- Language Selector -->
+					<li class="dropdown language-selector">
+		
+						语言选择: &nbsp;
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" data-close-others="true">
+							<img src="<?php echo __PUBLIC__;?>assets/images/cn.jpg" width="16"/>
+						</a>
+		
+						<ul class="dropdown-menu pull-right">
+						
+							<li class="active">
+								<a href="#">
+									<img src="<?php echo __PUBLIC__;?>assets/images/cn.jpg" width="16"/>
+									<span>简体中文</span>
+								</a>
+							</li>
+							
+						</ul>
+		
+					</li>
+		
+		
+					<li class="sep"></li>
+		
+					<li>
+						<a href="<?php echo __URL__;?>index.php/agent/server/exitlogin">
+							安全退出 <i class="entypo-logout right"></i>
+						</a>
+					</li>
+				</ul>
+		
+			</div>
+		
+		</div>
+		
+		<hr />

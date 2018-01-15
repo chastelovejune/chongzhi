@@ -1,0 +1,97 @@
+<div style="margin: 15px;">
+	<form class="layui-form" id="formAddHandlingFee">
+	   <div class="layui-form-item">
+					<label class="layui-form-label">分销商级别</label>
+					<div class="layui-input-block">
+						<select name="agent_idrank"  lay-filter="filter">
+							<option value="null">请选择分销商级别</option>
+							<?php $rank = M("agentrank")->select();
+							foreach ($rank as $r){
+							?>
+							<option value="<?php echo $r['id'];?>"><?php echo $r['agentrank_name'];?></option>
+							<?php }?>
+						</select>
+					</div>
+		</div>
+		<!--上一级代理2018.1.14-->
+		<!--需要优化2级联动-->
+		<div class="layui-form-item">
+				<label class="layui-form-label">上级代理</label>
+				<div class="layui-input-block">
+					<select name="agent_levelid" id="agent_levelid">
+						<option value="null" >请选择上级代理用户</option>
+
+
+					</select>
+				</div>
+			</div>
+
+		<!---->
+		<div class="layui-form-item">
+			<label class="layui-form-label">用户名</label>
+			<div class="layui-input-block">
+				<input type="text" name="agent_username" placeholder="请输入分销商登录用户名.." class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">密  码</label>
+			<div class="layui-input-block">
+			<input type="password" name="agent_password" placeholder="请设置初始密码.." class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">绑定软件</label>
+			<div class="layui-input-block">
+			<?php foreach($item as $it){?>
+				<input type="checkbox" name="agent_itemid[]" value="<?php echo $it['id']?>" title="<?php echo $it['item_name']?>">
+			<?php }?>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">充值点</label>
+			<div class="layui-input-block">
+				<input type="text" name="agent_moeny" value="0.00" class="layui-input">
+			</div>
+		</div>
+	<!--	<div class="layui-form-item">
+			<label class="layui-form-label">盈利余额</label>
+			<div class="layui-input-block">
+				<input type="text" name="agent_gain" value="0.00" class="layui-input">
+			</div>
+		</div>
+		-->
+		<div class="layui-form-item">
+			<label class="layui-form-label">QQ账号</label>
+			<div class="layui-input-block">
+				<input type="text" name="agent_qq" placeholder="请输入QQ号码.." class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">邮箱地址</label>
+			<div class="layui-input-block">
+				<input type="text" name="agent_email" placeholder="邮箱地址,用于找回密码.." class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">提现方式</label>
+			<div class="layui-input-block">
+				<input type="radio" name="agent_payment" value="1" title="支付宝" checked>
+				<input type="radio" name="agent_payment" value="2" title="银行卡(填写账户前面加卡类型)">
+				<input type="radio" name="agent_payment" value="3" title="Paypal">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">提现账户</label>
+			<div class="layui-input-block">
+				<input type="text" name="agent_payname" placeholder="请填写提现账户地址,银行卡请带银行信息.." class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">开通下级</label>
+			<div class="layui-input-block">
+				<input type="checkbox" name="agent_power" value="1" lay-skin="switch">
+			</div>
+		</div>
+		<button lay-filter="edit" lay-submit style="display: none;"></button>
+	</form>
+</div>

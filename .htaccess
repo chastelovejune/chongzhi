@@ -1,0 +1,10 @@
+<IfModule mod_rewrite.c>
+  Options +FollowSymlinks
+  RewriteEngine On
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteRule ^c(.*).html$ index.php/writings/index/home/sort/$1 [L]
+  RewriteRule ^f(.*).html$ index.php/writings/index/home/frozen/$1 [L]
+  RewriteRule ^w(.*).html$ index.php/writings/index/view/id/$1 [L]
+  RewriteRule ^p(.*).html$ index.php/writings/index/home/page/$1 [L]
+</IfModule>

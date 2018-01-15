@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>聊天管理</title>
+		<link rel="stylesheet" href="<?php echo __PUBLIC__;?>plugins/layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="<?php echo __PUBLIC__;?>css/global.css?v=1.2" media="all">
+		<link rel="stylesheet" href="<?php echo __PUBLIC__;?>css/table.css" />
+		<link rel="stylesheet" href="<?php echo __PLUG__;?>emoji/lib/css/jquery.mCustomScrollbar.min.css"/>
+        <link rel="stylesheet" href="<?php echo __PLUG__;?>emoji/dist/css/jquery.emoji.css"/>
+        <link rel="stylesheet" href="<?php echo __PLUG__;?>emoji/lib/css/railscasts.css"/>
+        <link rel="stylesheet" href="<?php echo __PLUG__;?>emoji/dist/css/index.css"/>
+	</head>
+
+	<body>
+		<div class="admin-main">
+
+			<blockquote class="layui-elem-quote">
+				<a href="javascript:;" class="layui-btn layui-btn-small" onclick="checkDelte();">
+					<i class="layui-icon">&#xe640;</i> 删除
+				</a>
+				<div class="layui-input-inline">
+						<input type="text" id="soText" value="<?php echo get('search');?>" placeholder="请输入关键词.." class="layui-input">
+				</div>
+				<a href="javascript:;" onclick="var ts = document.getElementById('soText').value;if(ts){location.href='<?php echo __URL__;?>index.php/admin/index/chat/search/' + ts;}else{location.href='<?php echo __URL__;?>index.php/admin/index/chat';}" class="layui-btn layui-btn-small">
+					<i class="layui-icon">&#xe615;</i> 查询聊天记录
+				</a>
+				
+				<a href="javascript:;" id="btns" class="layui-btn layui-btn-small">
+					<i class="layui-icon">&#xe650;</i> 选择表情 (回复的时候可选择表情)
+				</a>
+				
+			</blockquote>
+				
+				<div class="layui-form">
+					<table class="layui-table admin-table">
+						<thead>
+							<tr>
+								<th style="width: 30px;"><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
+								<th>通讯ID</th>
+								<th>发信人</th>
+								<th>聊天信息</th>
+								<th>发送时间</th>
+								<th>回复信息</th>
+								<th>回复时间</th>
+								<th>操作</th>
+							</tr>
+						</thead>
+						
+						<tbody>
+						<?php  if(empty($data)){echo '<tr><td colspan="8" style="color:green;text-align:center;">没有任何数据..</td></tr>';}?>
+						<?php foreach($data as $db){?>
+		  		<tr>
+				<td><input type="checkbox" name="godid" value="<?php echo $db['id'];?>" lay-skin="primary"></td>
+				<td><?php echo $db['id'];?></td>
+				<td><?php echo $db['agentchat_name'];?></td>
+				<td class="emojiBs"><?php echo $db['agentchat_content'];?></td>
+				<td><?php echo $db['agentchat_time'];?></td>
+				<td class="emojiBs"><?php echo $db['agentchat_return'] == ''?'<span style="color:red;">未回复</span>':$db['agentchat_return'];?></td>
+				<td><?php echo $db['agentchat_retime'] == ''?'<span style="color:red;">请及时回复</span>':$db['agentchat_retime'];?></td>
+				<td>
+				<a data-id="<?php echo $db['id'];?>" onclick="edit(this)" class="layui-btn layui-btn-mini">回复信息</a>
+					<a href="javascript:;" onclick="if(window.confirm('你确定要删除吗？')){ location.href='<?php echo __URL__;?>index.php/admin/server/pub/action/delete/tpl/agentchat/id/<?php echo $db['id'];?>/url/<?php echo Sendurl();?>'; }else{ return false;}" class="layui-btn layui-btn-danger layui-btn-mini">删除</a>
+				</td>
+			</tr><?php }?>
+						</tbody>
+					</table>
+				</div>
+		
+
+		<div id="paged" class="page" style="margin-left: 1px;">
+			<div class="layui-box layui-laypage layui-laypage-default">
+
+				<?php autopage($arrayPage['count'], $arrayPage['page'], 10);?>
+				
+			</div>
+		</div>
+
+	</div>
+		<script type="text/javascript" src="<?php echo __PUBLIC__;?>plugins/layui/layui.js"></script>
+		<script>
+		
+
+		
+		
+		
+		layui.use('form', function(){
+			  var $ = layui.jquery, form = layui.form(),layer = layui.layer;
+			  
+			  //全选
+			  form.on('checkbox(allChoose)', function(data){
+			    var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
+			    child.each(function(index, item){
+			      item.checked = data.elem.checked;
+			    });
+			    form.render('checkbox');
+			  });
+
+		layui.use(['form', 'layedit', 'laydate'], function(){
+			  var form = layui.form()
+			  ,layer = layui.layer
+			  ,layedit = layui.layedit
+			  ,laydate = layui.laydate;
+			});
+		});
+		
+		//删除选中的
+		  function checkDelte(){//jquery获取复选框值 
+			  layui.use('form', function(){
+				  var $ = layui.jquery,layer = layui.layer;
+				  var chk_value = ''; 
+				  
+				  $('input[name="godid"]:checked').each(function(){ 
+				  chk_value += $(this).val() + ',';
+				  }); 
+				  if(chk_value.length==0){
+					  layer.msg("请选择后再进行操作!");
+				  }else{
+					 location.href='<?php echo __URL__;?>index.php/admin/server/pub/action/delete/tpl/agentchat/id/' + chk_value+'/url/<?php echo Sendurl();?>';
+				  }
+			  
+			  });
+			}
+		
+		
+			//这个是点击之后才添加的。
+			 function edit(data) {
+				 //获取当前ID
+				 layui.use(['layer'], function() {
+						var $ = layui.jquery,
+							layer = layui.layer;
+						//这个是点击之后才添加的。
+						var addBoxIndex = -1;
+						var vid = data.attributes['data-id'].nodeValue;
+						if(addBoxIndex !== -1)
+								return;
+							//本表单通过ajax加载 --以模板的形式，当然你也可以直接写在页面上读取
+							$.get('<?php echo __URL__;?>index.php/admin/index/sendchat/id/'+vid, null, function(form) {
+								addBoxIndex = layer.open({
+									type: 1,
+									title: '回复通讯信息',
+									content: form,
+									btn: ['确认回复', '取消'],
+									shade: false,
+									offset: ['100px', '30%'],
+									area: ['650px', '400px'],
+									zIndex: 19950924,
+									maxmin: true,
+									yes: function(index) {
+										//触发表单的提交事件
+										$('form.layui-form').find('button[lay-filter=edit]').click();
+									},
+									full: function(elem) {
+										var win = window.top === window.self ? window : parent.window;
+										$(win).on('resize', function() {
+											var $this = $(this);
+											elem.width($this.width()).height($this.height()).css({
+												top: 0,
+												left: 0
+											});
+											elem.children('div.layui-layer-content').height($this.height() - 95);
+										});
+									},
+									success: function(layero, index) {
+										//弹出窗口成功后渲染表单
+										var form = layui.form();
+										form.render();
+										form.on('submit(edit)', function(data) {
+											$.ajax({
+							                    type: "POST",
+							                    dataType: "json",
+							                    url: '<?php echo __URL__;?>index.php/admin/server/sendchat/id/'+vid,
+							                    data: $('#formSendHandlingFee').serialize(),
+							                    success: function (data) {
+								                     if(data.code == "1"){
+								                    	layer.msg("修改成功");
+								                    	location.href='';
+									                 }else{
+									                	layer.msg("修改失败");
+									                	location.href='';
+													 } 
+							                    	
+							                    },
+							                    error: function(data) {
+							                        alert("error:"+data.responseText);
+							                     }
+								 });
+											
+											return false; //阻止表单跳转。						
+										});
+										//console.log(layero, index);
+									},
+									end: function() {
+										addBoxIndex = -1;
+									}
+								});
+							});
+						
+					});
+				
+			};
+			
+			
+			
+		</script>
+		
+		<script src="<?php echo __PLUG__;?>emoji/lib/script/jquery.min.js"></script>
+        <script src="<?php echo __PLUG__;?>emoji/lib/script/highlight.pack.js"></script>
+        <script src="<?php echo __PLUG__;?>emoji/lib/script/jquery.mousewheel-3.0.6.min.js"></script>
+        <script src="<?php echo __PLUG__;?>emoji/lib/script/jquery.mCustomScrollbar.min.js"></script>
+        <script src="<?php echo __PLUG__;?>emoji/dist/js/jquery.emoji.min.js"></script>
+	   <script>
+		$(".emojiBs").emojiParse({
+            icons: [{
+                path: "<?php echo __PLUG__;?>emoji/dist/img/tieba/",
+                file: ".jpg",
+                placeholder: ":{alias}:",
+                alias: {
+                    1: "hehe",
+                    2: "haha",
+                    3: "tushe",
+                    4: "a",
+                    5: "ku",
+                    6: "lu",
+                    7: "kaixin",
+                    8: "han",
+                    9: "lei",
+                    10: "heixian",
+                    11: "bishi",
+                    12: "bugaoxing",
+                    13: "zhenbang",
+                    14: "qian",
+                    15: "yiwen",
+                    16: "yinxian",
+                    17: "tu",
+                    18: "yi",
+                    19: "weiqu",
+                    20: "huaxin",
+                    21: "hu",
+                    22: "xiaonian",
+                    23: "neng",
+                    24: "taikaixin",
+                    25: "huaji",
+                    26: "mianqiang",
+                    27: "kuanghan",
+                    28: "guai",
+                    29: "shuijiao",
+                    30: "jinku",
+                    31: "shengqi",
+                    32: "jinya",
+                    33: "pen",
+                    34: "aixin",
+                    35: "xinsui",
+                    36: "meigui",
+                    37: "liwu",
+                    38: "caihong",
+                    39: "xxyl",
+                    40: "taiyang",
+                    41: "qianbi",
+                    42: "dnegpao",
+                    43: "chabei",
+                    44: "dangao",
+                    45: "yinyue",
+                    46: "haha2",
+                    47: "shenli",
+                    48: "damuzhi",
+                    49: "ruo",
+                    50: "OK"
+                }
+            }, {
+                path: "<?php echo __PLUG__;?>emoji/dist/img/qq/",
+                file: ".gif",
+                placeholder: "#qq_{alias}#"
+            }]
+        });
+       
+    
+    
+        
+    hljs.initHighlightingOnLoad();
+      
+
+        
+</script>
+	</body>
+
+</html>

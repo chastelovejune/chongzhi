@@ -1,0 +1,47 @@
+<div style="margin: 15px;">
+	<form class="layui-form" id="formEditHandlingFee">
+	   
+		<div class="layui-form-item">
+			<label class="layui-form-label">数据名称</label>
+			<div class="layui-input-block">
+				<input type="text" value="<?php echo $sec['security_name'];?>" name="security_name" placeholder="数据名称,尽量使用英文..." class="layui-input">
+			</div>
+		</div>
+        <div class="layui-form-item layui-form-text">
+					<label class="layui-form-label">数据内容</label>
+					<div class="layui-input-block">
+						<textarea rows="10" name="security_content" placeholder="该数据的内容,文本形式..." class="layui-textarea"><?php echo $sec['security_content'];?></textarea>
+					</div>
+		</div>
+	
+		<div class="layui-form-item">
+					<label class="layui-form-label">绑定软件</label>
+					<div class="layui-input-block">
+						<select name="security_itemid">
+							<option value="0">请选择一个软件</option>
+							<?php foreach($item as $it){?>
+							<option value="<?php echo $it['id']?>" <?php echo $sec['security_itemid']==$it['id']?'selected':'';?> ><?php echo $it['item_name']?></option>
+							<?php }?>
+						</select>
+					</div>
+				</div>
+		
+		
+        <div class="layui-form-item">
+			<label class="layui-form-label">数据安全</label>
+			<div class="layui-input-block">
+			<input type="checkbox" name="security_encrypt" title="安全加密" <?php echo $sec['security_encrypt']==1?'checked':'';?> >
+			<input type="checkbox" name="security_cookies" title="用户验证" <?php echo $sec['security_cookies']==1?'checked':'';?>>
+			<input type="checkbox" name="security_dynamic" title="动态数据" <?php echo $sec['security_dynamic']==1?'checked':'';?>>
+			</div>
+		</div>
+	
+		<div class="layui-form-item">
+			<label class="layui-form-label">存活周期</label>
+			<div class="layui-input-block">
+				<input type="text" name="security_cycle" value="<?php echo $sec['security_cycle'];?>" placeholder="请输入一个数值,按分钟计算.." class="layui-input">
+			</div>
+		</div>
+		<button lay-filter="edit" lay-submit style="display: none;"></button>
+	</form>
+</div>

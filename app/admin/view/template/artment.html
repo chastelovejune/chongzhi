@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>软件列表</title>
+		<link rel="stylesheet" href="<?php echo __PUBLIC__;?>plugins/layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="<?php echo __PUBLIC__;?>css/global.css" media="all">
+		<link rel="stylesheet" href="<?php echo __PUBLIC__;?>css/table.css" />
+	</head>
+
+	<body>
+		<div class="admin-main">
+
+			<blockquote class="layui-elem-quote">
+				<a href="javascript:;" class="layui-btn layui-btn-small" id="add">
+					<i class="layui-icon">&#xe608;</i> 创建软件
+				</a>
+			</blockquote>
+			
+				
+				<div class="layui-form">
+					<table class="layui-table admin-table">
+						<thead>
+							<tr>
+								<th style="width: 50px;">软件ID</th>
+								<th>软件名称</th>
+								<th>版本号</th>
+								<th>KEY</th>
+								<th>运营模式</th>
+								<th>登录方式</th>
+								<th>注册通道</th>
+								<th>登录开关</th>
+								<th>在线监控</th>
+								<th>设备监控</th>
+								<th>总开关</th>
+								<th>操作</th>
+							</tr>
+						</thead>
+						<tbody>
+						<?php  if(empty($data)){echo '<tr><td colspan="12" style="color:green;text-align:center;">没有任何数据..</td></tr>';}?>
+						<?php foreach($data as $db){?>
+		  <tr>
+				<td><?php echo $db['id'];?></td>
+				<td><?php echo $db['item_name'];?></td>
+				<td><?php echo $db['item_version'];?></td>
+				<td style="color:#009688;"><?php echo $db['item_itkey'];?></td>
+				<td><?php if($db['item_doType']==1){$fps='计时模式';} if($db['item_doType']==2){$fps='扣点模式';} if($db['item_doType']==3){$fps='金钱模式';} echo $fps;?></td>
+				<td><?php echo $db['item_loginType']==1?'账号登录':'充值卡登录';?></td>
+				<td style="color:green;"><?php echo $db['item_regMobile']==1?'[手机] ':'';?><?php echo $db['item_regEmail']==1?'[邮箱 ] ':'';?><?php echo $db['item_regGexi']==1?'[个性注册]':'';?></td>
+				<td><?php echo $db['item_loginExt']==1?'<span style="color:green;">开启状态</span>':'<span style="color:red;">关闭状态</span>';?></td>
+				<td><?php echo $db['item_online']==1?'<span style="color:green;">正在监控</span>':'<span style="color:red;">关闭状态</span>';?></td>
+				<td><?php echo $db['item_device']==1?'<span style="color:green;">监控中..</span>':'<span style="color:red;">关闭状态</span>';?></td>
+				<td><?php echo $db['item_open']==1?'<span style="color:green;">开启状态</span>':'<span style="color:red;">关闭状态</span>';?></td>
+				<td>
+					<a data-id="<?php echo $db['id'];?>" data-title="<?php echo $db['item_name'];?>" onclick="edit(this)" class="layui-btn layui-btn-mini">配置修改</a>
+					<a href="javascript:;" onclick="if(window.confirm('你确定要删除吗？')){ location.href='<?php echo __URL__;?>index.php/admin/server/delItem/id/<?php echo $db['id'];?>'; }else{ return false;}" class="layui-btn layui-btn-danger layui-btn-mini">删除</a>
+				</td>
+			</tr><?php }?>
+						</tbody>
+					</table>
+				</div>
+			
+			<div class="admin-table-page">
+				<div id="paged" class="page">
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript" src="<?php echo __PUBLIC__;?>plugins/layui/layui.js"></script>
+		<script>
+
+		//这个是点击之后才添加的。
+		 function edit(data) {
+			 layui.use(['layer'], function() {
+
+					var $ = layui.jquery,
+					layer = layui.layer;
+					var vid = data.attributes['data-id'].nodeValue;
+					var itemName = data.attributes['data-title'].nodeValue;
+					parent.tab.tabAdd({
+						href: "<?php echo __URL__;?>index.php/admin/index/editment/id/"+vid, //地址
+						icon: "&#xe608;",
+						title: "配置软件-"+itemName
+					});
+					
+			 });
+
+		};
+		
+		
+			layui.use(['layer'], function() {
+				var $ = layui.jquery,
+					layer = layui.layer;
+				//这个是点击之后才添加的。
+				$('#add').on('click', function() {
+					
+	
+					
+					 var con = '<form id="formAddHandlingFee"><div style="padding:10px;"><input type="text" class="layui-input" style="margin-bottom:5px;" name="item_name" placeholder="要创建的软件名称.." /></div></form>';
+						
+						layer.open({
+							type: 1,
+							title: '添加软件',
+							content: con,
+							btn: ['确定创建', '关闭创建'],
+							area: ['350px', '150px'],
+							yes: function(index, layero) {
+								$.ajax({
+						                    type: "POST",
+						                    dataType: "json",
+						                    url: '<?php echo __URL__;?>index.php/admin/server/addItem',
+						                    data: $('#formAddHandlingFee').serialize(),
+						                    success: function (data) {
+							                     if(data.code == "1"){
+							                    	layer.msg("添加成功");
+							                    	location.href='';
+								                 }else{
+								                	layer.msg("添加失败");
+								                	location.href='';
+												 } 
+						                    	
+						                    },
+						                    error: function(data) {
+						                        alert("error:"+data.responseText);
+						                     }
+							 });
+					
+							},
+							shade :false,
+							maxmin :true
+						}); 
+
+				});
+
+				
+
+			});
+		</script>
+	
+	</body>
+
+</html>

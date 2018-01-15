@@ -1,0 +1,90 @@
+		<?php include 'header.html'; $itemDB = M("item");?>
+    
+		<div class=profile-env>
+		<div class="row">
+		<div class="col-md-12">
+		  <div class="col-sm-1">
+									<select id="items" onchange="items()" class="form-control">
+										<option value="null">选择软件</option>
+										<option value="0">全部软件</option>
+										<?php $fps = explode(",", $user['agent_itemid']);for ($i=0;$i<count($fps);$i++){
+										    $itdata = $itemDB->select("id={$fps[$i]}")[0];
+										    ?>
+										
+										<option value="<?php echo $itdata['id'];?>" <?php if (get("itemID") == $itdata['id']) echo 'selected';?> ><?php echo $itdata['item_name'];?></option>
+										<?php }?>
+									</select>
+		</div>
+		
+		<button type="button" class="btn btn-success btn-sm" onclick="create();">生成充值卡</button>&nbsp;&nbsp;&nbsp;
+        <button type="button" class="btn btn-default btn-sm" onclick="location.href='<?php echo __URL__;?>index.php/agent/index/mycard'">全部</button>
+		<button type="button" class="btn btn-default btn-sm" onclick="location.href='<?php echo preg_replace("/\/frozen\/[\s\S]+?/", "", geturl());?>/frozen/5'">可使用</button>
+		<button type="button" class="btn btn-default btn-sm" onclick="location.href='<?php echo preg_replace("/\/frozen\/[\s\S]+?/", "", geturl());?>/frozen/3'">已使用</button>
+		<button type="button" class="btn btn-default btn-sm" onclick="location.href='<?php echo preg_replace("/\/frozen\/[\s\S]+?/", "", geturl());?>/frozen/4'">未使用</button>
+		<button type="button" class="btn btn-default btn-sm" onclick="location.href='<?php echo preg_replace("/\/frozen\/[\s\S]+?/", "", geturl());?>/frozen/2'">已冻结</button>
+		<button type="button" class="btn btn-default btn-sm" onclick="location.href='<?php echo preg_replace("/\/frozen\/[\s\S]+?/", "", geturl());?>/frozen/1'">未冻结</button>&nbsp;&nbsp;&nbsp;
+		<button type="button" class="btn btn-default btn-sm" onclick="location.href='<?php echo __URL__;?>index.php/agent/server/Downrecharge/frozen/<?php echo get('frozen');?>'">导出该分类的充值卡</button>
+		</div>
+		
+		</div>
+		
+		<div class="row">
+			
+			<div class="col-md-12">
+				
+				<h4></h4>
+				
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>充值卡号</th>
+							<th>面值</th>
+							<th>卡号类型</th>
+							<th>生成时间</th>
+							<th>使用时间</th>
+							<th>使用者</th>
+							<th>绑定软件</th>
+							<th>批卡代码</th>
+						</tr>
+					</thead>
+					
+					<tbody>
+					<?php if (empty($data)){?>
+					<tr>
+							<td colspan="9" style="text-align: center;">当前还没有你的充值卡数据</td>
+					</tr>
+					<?php }?>
+					<?php foreach ($data as $db){?>
+						<tr>
+							<td><?php echo $db['id'];?></td>
+							<td><?php echo $db['recharge_cami'];?></td>
+							<td><?php echo $db['recharge_paynum'];?></td>
+							<td><?php echo $db['recharge_logint']==1?'用户充值':'卡号登录';?></td>
+							<td><?php echo date("Y-m-d H:i:s",$db['recharge_ctime']);?></td>
+							<td><?php echo $db['recharge_usetime'] == 0 ? '无记录' : date("Y-m-d H:i:s",$db['recharge_usetime']);?></td>
+							<td><?php echo $db['recharge_user'] == 0 ?'未使用':$db['recharge_user'];?></td>
+							<td><?php echo $itemDB->select("id={$db['recharge_itemid']}")[0]['item_name'];?></td>
+							<td><?php echo $db['recharge_rand'];?></td>
+						</tr>
+				    <?php }?>
+						
+					</tbody>
+				</table>
+				
+				<?php autopage($arrayPage['count'], $arrayPage['page'], 10);?>
+				
+			</div>
+			
+		</div>
+		
+	
+		</div>
+		
+		<script src="<?php echo __PLUG__;?>emoji/lib/script/jquery.min.js"></script>
+        <script src="<?php echo __PLUG__;?>emoji/lib/script/highlight.pack.js"></script>
+        <script src="<?php echo __PLUG__;?>emoji/lib/script/jquery.mousewheel-3.0.6.min.js"></script>
+        <script src="<?php echo __PLUG__;?>emoji/lib/script/jquery.mCustomScrollbar.min.js"></script>
+        <script src="<?php echo __PLUG__;?>emoji/dist/js/jquery.emoji.min.js"></script>
+        <?php include 'rec.h';?>
+		<?php include 'footer.html';?>

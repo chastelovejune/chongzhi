@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>支付订单管理</title>
+		<link rel="stylesheet" href="<?php echo __PUBLIC__;?>plugins/layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="<?php echo __PUBLIC__;?>css/global.css?v=1.2" media="all">
+		<link rel="stylesheet" href="<?php echo __PUBLIC__;?>css/table.css" />
+	</head>
+
+	<body>
+		<div class="admin-main">
+
+			<blockquote class="layui-elem-quote">
+				
+				<a href="javascript:;" class="layui-btn layui-btn-small" onclick="checkDelte();">
+					<i class="layui-icon">&#xe640;</i> 删除
+				</a>
+				
+				
+	            <a href="javascript:;" class="layui-btn layui-btn-small" id="timeserach">
+					<i class="layui-icon">&#xe628;</i> 查订单日期
+				</a>
+				
+			
+				<div class="layui-input-inline">
+						<input type="text" id="soText" value="<?php echo get('search');?>" placeholder="流水单号.." class="layui-input">
+				</div>
+				<a href="javascript:;" onclick="var ts = document.getElementById('soText').value;if(ts){location.href='<?php echo __URL__;?>index.php/admin/index/alipay/search/' + ts;}else{location.href='<?php echo __URL__;?>index.php/admin/index/alipay';}" class="layui-btn layui-btn-small">
+					<i class="layui-icon">&#xe615;</i> 查询
+				</a>
+			</blockquote>
+				
+
+				
+		
+			<legend><a href='<?php echo __URL__;?>index.php/admin/index/alipay' class="layui-btn layui-btn-small layui-btn-radius">全部</a>
+			
+			<a href='<?php echo preg_replace("/\/frozen\/[\s\S]+?/", "", geturl());?>/frozen/1' class="layui-btn layui-btn-small layui-btn-normal layui-btn-radius">未付款</a>
+			<a href='<?php echo preg_replace("/\/frozen\/[\s\S]+?/", "", geturl());?>/frozen/2' class="layui-btn layui-btn-small layui-btn-normal layui-btn-radius">已付款</a>
+            <a href='<?php echo preg_replace("/\/frozen\/[\s\S]+?/", "", geturl());?>/frozen/3' class="layui-btn layui-btn-small layui-btn-danger layui-btn-radius">支付宝</a>
+			<a href='<?php echo preg_replace("/\/frozen\/[\s\S]+?/", "", geturl());?>/frozen/4' class="layui-btn layui-btn-small layui-btn-danger layui-btn-radius">微信</a>
+			<span class="layui-btn layui-btn-small layui-btn-radius layui-btn-disabled" style="color:green;font-family:微软雅黑;"> 共计 <?php echo $arrayPage['camiNum'];?> 条记录 </span>
+			</legend>
+			
+			
+		
+			
+				<div class="layui-form">
+					<table class="layui-table admin-table">
+						<thead>
+							<tr>
+								<th style="width: 30px;"><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
+								<th>流水号</th>
+								<th>金额</th>
+								<th>创建时间</th>
+								<th>支付时间</th>
+								<th>充值用户</th>
+								<th>充值来源</th>
+								<th>订单状态</th>
+								<th>异常检测</th>
+								<th>支付类型</th>
+								<th>操作</th>
+							</tr>
+						</thead>
+						
+						<tbody>
+						<?php  if(empty($data)){echo '<tr><td colspan="10" style="color:green;text-align:center;">没有任何数据..</td></tr>';}?>
+						<?php foreach($data as $db){?>
+		  		<tr>
+				<td><input type="checkbox" name="godid" value="<?php echo $db['id'];?>" lay-skin="primary"></td>
+				<td><?php echo $db['alipay_serial'];?></td>
+				<td><?php echo $db['alipay_moeny'];?></td>
+				<td><?php echo date("Y-m-d H:i:s",$db['alipay_ctime']);?></td>
+				<td><?php echo $db['alipay_time'];?></td>
+				<td><?php echo $db['alipay_memo'];?></td>
+				<td><?php echo $db['alipay_repx']==1?'分销商充值':'用户购卡';?></td>
+				<td><?php echo $db['alipay_state']==1?'<span style="color:red;">等待支付</span>':'<span style="color:green;">充值完毕</span>';?></td>
+				<td><?php echo $db['alipay_frozen']==1?'<span style="color:green;">正常</span>':'<span style="color:red;">已冻结</span>';?></td>
+				<td><?php echo $db['alipay_type']==1?'支付宝':'微信';?></td>
+				<td>
+					<a href="javascript:;" onclick="if(window.confirm('你确定要删除该数据吗？')){ location.href='<?php echo __URL__;?>index.php/admin/server/pub/action/delete/tpl/alipay/id/<?php echo $db['id'];?>/url/<?php echo Sendurl();?>'; }else{ return false;}" class="layui-btn layui-btn-danger layui-btn-mini">删除该订单</a>
+				</td>
+			</tr><?php }?>
+						</tbody>
+					</table>
+				</div>
+		
+
+		<div id="paged" class="page" style="margin-left: 1px;">
+			<div class="layui-box layui-laypage layui-laypage-default">
+				
+				<?php autopage($arrayPage['count'], $arrayPage['page'], 10);?>
+				
+			</div>
+		</div>
+
+	</div>
+		<script type="text/javascript" src="<?php echo __PUBLIC__;?>plugins/layui/layui.js"></script>
+		<script>
+		
+		layui.use('form', function(){
+			  var $ = layui.jquery, form = layui.form(),layer = layui.layer;
+			  
+			  //全选
+			  form.on('checkbox(allChoose)', function(data){
+			    var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
+			    child.each(function(index, item){
+			      item.checked = data.elem.checked;
+			    });
+			    form.render('checkbox');
+			  });
+
+		layui.use(['form', 'layedit', 'laydate'], function(){
+			  var form = layui.form()
+			  ,layer = layui.layer
+			  ,layedit = layui.layedit
+			  ,laydate = layui.laydate;
+			});
+		});
+		
+		//删除选中的
+		  function checkDelte(){//jquery获取复选框值 
+			  layui.use('form', function(){
+				  var $ = layui.jquery,layer = layui.layer;
+				  var chk_value = ''; 
+				  
+				  $('input[name="godid"]:checked').each(function(){ 
+				  chk_value += $(this).val() + ',';
+				  }); 
+				  if(chk_value.length==0){
+					  layer.msg("请选择后再进行操作!");
+				  }else{
+					 location.href='<?php echo __URL__;?>index.php/admin/server/pub/action/delete/tpl/alipay/id/' + chk_value+'/url/<?php echo Sendurl();?>';
+				  }
+			  
+			  });
+			}
+		
+	
+		
+		layui.use(['layer'], function() {
+			var $ = layui.jquery,
+				layer = layui.layer;
+
+			$('#timeserach').on('click', function() {
+				 var con = '<div style="padding:10px;"><input type="text" id="TimeID" lay-verify="date" placeholder="yyyy-mm-dd" value="<?php echo get('TimeID');?>" autocomplete="off" class="layui-input" onclick="layui.laydate({elem: this})"></div>';
+					
+					layer.open({
+						type: 1,
+						title: '按照日期查询订单',
+						content: con,
+						btn: ['开始查询', '取消查询'],
+						area: ['350px', '160px'],
+						yes: function(index, layero) {
+							var TimeID = $('#TimeID').val();
+							location.href='<?php echo __URL__;?>index.php/admin/index/alipay/TimeID/'+TimeID;
+						},
+						shade :false,
+						maxmin :true
+					}); 
+
+			});
+			
+		});
+		
+	
+			
+		</script>
+	
+	</body>
+
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head lang="en">
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>在线购卡 - 做你专属的购物车!</title>
+<link rel="stylesheet" type="text/css"
+	href="<?php echo __PUBLIC__;?>css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css"
+	href="<?php echo __PUBLIC__;?>css/style.css">
+</head>
+<body>
+	<div class="ct-pageWrapper">
+		<main>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-3">
+					<div class="widget">
+						<h2 class="widget-header">购买须知</h2>
+						<div class="ct-cart">
+							<span>purchase notes</span>
+							<ol>
+								<li class="animated fadeIn">
+								<span class="ct-cart-name" style="font-size: 13px;">
+								1. 购买充值卡前，请考虑好要不要拍卡，本平台一旦付款，立即发货，所以不给于退款，还望见谅！
+								</span>
+								</li>
+								<li class="animated fadeIn">
+								<span class="ct-cart-name" style="font-size: 10px;">
+								2. 在付款当中请不要关闭页面，付款完毕后会自动将卡密显示在你的网页当中。
+								</span>
+								</li>
+								<li class="animated fadeIn">
+								<span class="ct-cart-name" style="font-size: 10px;">
+								3. 建议在获取到充值卡后立即使用，尽量不要堆存，以免造成不必要的损失。
+								</span>
+								</li>
+								
+								
+							</ol>
+						
+					<select class="form-control" id="pay" style="width:110px;display:inline-block;margin-top:4px;border:0;">
+  <option value="1">支付宝</option>
+  <option value="2">微信</option>
+</select> 	
+		<button type="submit" onclick="post();" class="ct-cart-checkout">立即购买</button>
+						</div>
+					</div>
+				</div>
+		<?php $Img = array("product-01.jpg","product-02.jpg","product-03.jpg","product-04.jpg");?>
+		<div class="col-md-9">
+					<div class="row">
+		  <?php foreach ($data as $db){?>
+			<div class="col-sm-4">
+							<div class="ct-product">
+								<div class="image">
+									<img
+										src="<?php echo __PUBLIC__ . "images/" . $Img[array_rand($Img)];?>"
+										alt="" style="width: 100%; height: 180px;">
+								</div>
+								<div class="inner" onclick="go(this);" data-id="<?php echo $db['id'];?>">
+									<a href="#" class="btn btn-motive ct-product-button"><i
+										class="fa fa-shopping-cart"></i></a>
+									<h2 class="ct-product-title"><?php echo $db['cardtype_name'];?></h2>
+									<span style="display: none;" class="ct-product-id"><?php echo $db['id'];?></span>
+									<p class="ct-product-description">面值:<?php echo $db['cardtype_num'];?></p>
+									<span class="ct-product-price">￥<?php echo $db['cardtype_me'];?></span>
+								</div>
+							</div>
+						</div>
+		<?php }?>
+			
+			
+		
+		  </div>
+				</div>
+			</div>
+		</div>
+		</main>
+		<script src="<?php echo __PUBLIC__;?>js/jquery-1.11.3.min.js"></script>
+
+
+	</div>
+	<div style="text-align: center; margin: -50px 0; font: normal 14px/24px 'MicroSoft YaHei';"></div>
+	<script type="text/javascript">
+	var id = 0;
+	function go(data){
+		  id = $(data).attr("data-id");
+		  $(".ct-product-button").css("background","#fe4578");
+		  $(data).find("a").css("background","#ccc");
+		}
+	function post(){
+
+		if(id != 0){
+			var pay = $("#pay").val();
+			window.open("<?php echo __URL__;?>index.php/shop/index/pay/itemId/<?php echo get("id")?>/id/"+id+"/alipay_type/"+pay);
+			  
+			}else{alert('请选择要购买的充值卡!');}
+		
+		}
+	</script>
+</body>
+</html>

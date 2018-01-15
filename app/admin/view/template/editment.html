@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>配置软件</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="format-detection" content="telephone=no">
+		<link rel="stylesheet" href="<?php echo __PUBLIC__;?>plugins/layui/css/layui.css" media="all" />
+        <style>
+		body{
+		font-family:微软雅黑;
+		}
+		</style>
+	</head>
+
+	<body>
+		<div class="layui-field-box layui-form" style="margin: 15px;width:700px;">
+
+			<form class="layui-form" id="formEditHandlingFee" action="">
+				<div class="layui-form-item">
+					<label class="layui-form-label">软件总开关</label>
+					<div class="layui-input-block">
+						<input type="checkbox" name="item_open" lay-skin="switch" title="软件总开关" <?php echo $data['item_open']==1?'checked':'';?>>
+					</div>
+				</div>
+				
+				
+				<div class="layui-form-item">
+					<label class="layui-form-label">软件名称</label>
+					<div class="layui-input-block">
+						<input type="text" name="item_name" value="<?php echo $data['item_name'];?>" placeholder="请输入软件名称.." class="layui-input">
+					</div>
+				</div>
+				
+				<div class="layui-form-item">
+					<label class="layui-form-label">KEY</label>
+					<div class="layui-input-block">
+						<input type="text" name="item_itkey" value="<?php echo $data['item_itkey'];?>" placeholder="请输入软件名称.." class="layui-input">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">注册通道</label>
+					<div class="layui-input-block">
+						<input type="checkbox" value="<?php echo $data['item_regMobile'];?>" name="item_regMobile" title="手机注册" <?php echo $data['item_regMobile']==1?'checked':'';?>>
+						<input type="checkbox" value="<?php echo $data['item_regEmail'];?>" name="item_regEmail" title="邮箱注册" <?php echo $data['item_regEmail']==1?'checked':'';?>>
+						<input type="checkbox" value="<?php echo $data['item_regGexi'];?>" name="item_regGexi" title="个性账号注册" <?php echo $data['item_regGexi']==1?'checked':'';?>>
+					</div>
+				</div>
+				
+				<div class="layui-form-item">
+					<label class="layui-form-label">IP注册数</label>
+					<div class="layui-input-block">
+						<input type="text" name="item_regipNum" value="<?php echo $data['item_regipNum'];?>" class="layui-input">
+					</div>
+				</div>
+				
+				<div class="layui-form-item">
+					<label class="layui-form-label">注册赠送</label>
+					<div class="layui-input-block">
+						<input type="text" name="item_regGive" value="<?php echo $data['item_regGive'];?>" class="layui-input">
+					</div>
+				</div>
+				
+				<div class="layui-form-item">
+					<label class="layui-form-label">注册配置</label>
+					<div class="layui-input-block">
+						<input type="checkbox" value="<?php echo $data['item_regCode'];?>" name="item_regCode" title="充值卡注册" <?php echo $data['item_regCode']==1?'checked':'';?>>
+						<input type="checkbox" value="<?php echo $data['item_regVeod'];?>" name="item_regVeod" title="注册验证码" <?php echo $data['item_regVeod']==1?'checked':'';?>>	
+					</div>
+				</div>
+				
+				<div class="layui-form-item">
+					<label class="layui-form-label">登录接口</label>
+					<div class="layui-input-block">
+						<input type="radio" name="item_loginType" value="1" title="账号登录" <?php echo $data['item_loginType']==1?'checked':'';?>>
+						<input type="radio" name="item_loginType" value="2" title="充值卡登录" <?php echo $data['item_loginType']==2?'checked':'';?>>
+					</div>
+				</div>
+				
+				<div class="layui-form-item">
+					<label class="layui-form-label">登陆次数/日</label>
+					<div class="layui-input-block">
+						<input type="text" name="item_loginDay" value="<?php echo $data['item_loginDay'];?>" class="layui-input">
+					</div>
+				</div>
+				
+				<div class="layui-form-item">
+					<label class="layui-form-label">登录配置</label>
+					<div class="layui-input-block">
+						<input type="checkbox" value="<?php echo $data['item_loginExt'];?>" name="item_loginExt" title="登录开关" <?php echo $data['item_loginExt']==1?'checked':'';?>>
+						<input type="checkbox" value="<?php echo $data['item_loginField'];?>" name="item_loginField" title="异地登录检测" <?php echo $data['item_loginField']==1?'checked':'';?>>
+						<input type="checkbox" value="<?php echo $data['item_loginCode'];?>" name="item_loginCode" title="登录验证码" <?php echo $data['item_loginCode']==1?'checked':'';?>>
+					</div>
+				</div>
+				
+				<div class="layui-form-item">
+					<label class="layui-form-label">运营模式</label>
+					<div class="layui-input-block">
+						<input type="radio" name="item_doType" value="1" title="时间模式(计时)" <?php echo $data['item_doType']==1?'checked':'';?>>
+						<input type="radio" name="item_doType" value="2" title="扣点模式(次数)" <?php echo $data['item_doType']==2?'checked':'';?>>
+						<input type="radio" name="item_doType" value="3" title="金钱模式(消费)" <?php echo $data['item_doType']==3?'checked':'';?>>
+					</div>
+				</div>
+				
+				<div class="layui-form-item">
+					<label class="layui-form-label">设备授权</label>
+					<div class="layui-input-block">
+						<input type="checkbox" value="<?php echo $data['item_device'];?>" name="item_device" title="设备授权监控" <?php echo $data['item_device']==1?'checked':'';?>>
+						<input type="checkbox" value="<?php echo $data['item_deviceEditus'];?>" name="item_deviceEditus" title="设备更换开关" <?php echo $data['item_deviceEditus']==1?'checked':'';?>>
+					</div>
+				</div>
+				
+				<div class="layui-form-item">
+					<label class="layui-form-label">惩罚扣除</label>
+					<div class="layui-input-block">
+						<input type="text" name="item_deviceEdit" value="<?php echo $data['item_deviceEdit'];?>" class="layui-input">
+					</div>
+				</div>
+				
+				<div class="layui-form-item">
+					<label class="layui-form-label">监控配置</label>
+					<div class="layui-input-block">
+						<input type="checkbox" value="<?php echo $data['item_online'];?>" name="item_online" title="账号在线监控" <?php echo $data['item_online']==1?'checked':'';?>>
+						<input type="checkbox" value="<?php echo $data['item_verForce'];?>" name="item_verForce" title="版本强制更新" <?php echo $data['item_verForce']==1?'checked':'';?>>
+						
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">心跳秒数</label>
+					<div class="layui-input-block">
+						<input type="text" name="item_heartbeat" value="<?php echo $data['item_heartbeat'];?>" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">自动发卡</label>
+					<div class="layui-input-block">
+						<input type="checkbox" name="item_shop" lay-skin="switch" title="自动发卡" <?php echo $data['item_shop']==1?'checked':'';?>>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">发卡地址</label>
+					<div class="layui-input-block">
+						<input type="text" disabled value="<?php echo sinaShortenUrl(__URL__ . "index.php/shop/index/cart/id/" . $data['id']);?>" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">软件版本</label>
+					<div class="layui-input-block">
+						<input type="text" name="item_version" value="<?php echo $data['item_version'];?>" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">下载地址</label>
+					<div class="layui-input-block">
+						<input type="text" name="item_verUrl" value="<?php echo $data['item_verUrl'];?>" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">更新内容</label>
+					<div class="layui-input-block">
+						<input type="text" name="item_verUpdate" value="<?php echo $data['item_verUpdate'];?>" class="layui-input">
+					</div>
+				</div>
+				<div class="layui-form-item layui-form-text">
+					<label class="layui-form-label">软件公告</label>
+					<div class="layui-input-block">
+						<textarea name="item_notice" class="layui-textarea"><?php echo $data['item_notice'];?></textarea>
+					</div>
+				</div>
+				<div class="layui-form-item">
+					<div class="layui-input-block">
+						<input type="button" id="ItemEdit" class="layui-btn" value="保存配置">
+					</div>
+				</div>
+			</form>
+		</div>
+		<script type="text/javascript" src="<?php echo __PUBLIC__;?>plugins/layui/layui.js"></script>
+		<script>
+		layui.use(['form', 'layedit', 'laydate'], function() { 
+			var form = layui.form(),
+				layer = layui.layer,
+				layedit = layui.layedit,
+				laydate = layui.laydate;
+		});
+		
+		
+		layui.use(['layer'], function() {
+			var $ = layui.jquery,
+				layer = layui.layer;
+			
+			$('#ItemEdit').on('click', function() {
+				$.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    url: '<?php echo __URL__;?>index.php/admin/server/editItem/id/<?php echo get('id');?>',
+                    data: $('#formEditHandlingFee').serialize(),
+                    success: function (data) {
+	                     if(data.code == "1"){
+	                    	layer.msg("配置修改成功");
+		                 }else{
+		                	layer.msg("配置修改失败");
+						 } 
+                    	
+                    },
+                    error: function(data) {
+                        alert("error:"+data.responseText);
+                     }
+				 });
+
+			});
+		});
+		
+	
+		</script>
+	</body>
+
+</html>

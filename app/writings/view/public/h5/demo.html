@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="swipeslider.css">
+    <title>Document</title>
+    <style>
+    table {
+	    width: 100%;
+	    border-collapse: separate;
+	    border-spacing: 3px;
+	    margin-top: 10px;
+    }
+    .server-item {
+        width: 50%;
+        background-color: #fff;
+        border: 1px solid #666;
+        border-radius: 5px;
+        box-sizing: border-box;
+    }
+    .service-image {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+    .server-item p {
+    	margin: 0;
+	    line-height: 2em;
+	    font-size: 12px;
+	    text-align: center;
+	    color: #000;
+	}
+    #full_feature {
+    	padding-top:40%!important;
+    }
+    </style>
+</head>
+<body>
+    <figure id="full_feature" class="swipslider">
+            <ul class="sw-slides">
+                <li class="sw-slide">
+                    <img src="a1.jpg">
+                </li>
+                <li class="sw-slide">
+                    <img src="a2.jpg">
+                </li>
+                <li class="sw-slide">
+                    <img src="a3.jpg">
+                </li>
+            </ul>
+        </figure>
+    <table cellspacing="3">
+        <tr>
+            <td class="server-item">
+                <img class="service-image" src="img.png" />
+                <p>惊喜兔</p>
+            </td>
+            <td class="server-item">
+                <img class="service-image" src="img.png" />
+                <p>惊喜兔</p>
+            </td>
+        </tr>
+        <tr>
+            <td class="server-item" >
+                <img class="service-image" src="img.png" />
+                <p>惊喜兔</p>
+            </td>
+            <td class="server-item">
+                <img class="service-image" src="img.png" />
+                <p>惊喜兔</p>
+            </td>
+        </tr>
+        <tr>
+            <td class="server-item">
+                <img class="service-image" src="img.png" />
+                <p>惊喜兔</p>
+            </td>
+            <td class="server-item">
+                <img class="service-image" src="img.png" />
+                <p>惊喜兔</p>
+            </td>
+        </tr>
+    </table>
+    <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+    <script src="swipeslider.min.js"></script>
+    <script>
+        $(window).load(function() {
+            $('#full_feature').swipeslider({
+                prevNextButtons: false
+            });
+        });
+    </script>
+</body>
+</html>

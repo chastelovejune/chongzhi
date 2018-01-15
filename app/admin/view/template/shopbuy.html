@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>商品订单</title>
+		<link rel="stylesheet" href="<?php echo __PUBLIC__;?>plugins/layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="<?php echo __PUBLIC__;?>css/global.css?v=1.2" media="all">
+		<link rel="stylesheet" href="<?php echo __PUBLIC__;?>css/table.css" />
+		<style type="text/css">
+        .layui-table td{
+        	font-size: 13px;
+        }
+        </style>
+	</head>
+
+	<body>
+		<div class="admin-main">
+
+			<blockquote class="layui-elem-quote">
+			
+			    <a href="javascript:;" class="layui-btn layui-btn-small" id="sendShop">
+					<i class="layui-icon">&#xe606;</i> 发货
+				</a>
+				
+				<a href="javascript:;" class="layui-btn layui-btn-small" onclick="checkDelte();">
+					<i class="layui-icon">&#xe640;</i> 删除
+				</a>
+
+				<div class="layui-input-inline">
+						<input type="text" id="soText" value="<?php echo get('search');?>" placeholder="请输入流水号进行查询.." class="layui-input">
+				</div>
+				<a href="javascript:;" onclick="var ts = document.getElementById('soText').value;if(ts){location.href='<?php echo __URL__;?>index.php/admin/index/shopbuy/search/' + ts;}else{location.href='<?php echo __URL__;?>index.php/admin/index/shopbuy';}" class="layui-btn layui-btn-small">
+					<i class="layui-icon">&#xe615;</i> 查询
+				</a>
+			</blockquote>
+			
+				
+			<legend><a href='<?php echo __URL__;?>index.php/admin/index/shopbuy' class="layui-btn layui-btn-small layui-btn-radius">全部</a>
+			
+			<a href='<?php echo preg_replace("/\/frozen\/[\s\S]+?/", "", geturl());?>/frozen/1' class="layui-btn layui-btn-small layui-btn-normal layui-btn-radius">已发货</a>
+			<a href='<?php echo preg_replace("/\/frozen\/[\s\S]+?/", "", geturl());?>/frozen/2' class="layui-btn layui-btn-small layui-btn-normal layui-btn-radius">未发货</a>
+			<span class="layui-btn layui-btn-small layui-btn-radius layui-btn-disabled" style="color:green;font-family:微软雅黑;"> 共计 <?php echo $arrayPage['num'];?> 个订单 </span>
+			</legend>
+				<div class=" layui-form">
+					<table class="layui-table admin-table">
+						<thead>
+							<tr>
+								<th style="width: 30px;"><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
+								<th>流水号 </th>
+								<th>商品名称 </th>
+								<th>所属分类</th>
+								<th>数量/单价</th>
+								<th>购价</th>
+								<th>用户名</th>
+								<th>订单时间</th>
+								<th>发货地址</th>
+								<th>发货状态</th>
+								<th>发货信息</th>
+								<th>发货类型</th>
+								<th>发货时间</th>
+								<th>操作</th>
+							</tr>
+						</thead>
+						
+						<tbody>
+						<?php  if(empty($data)){echo '<tr><td colspan="14" style="color:green;text-align:center;">没有任何数据..</td></tr>';}?>
+						<?php foreach($data as $db){?>
+		  		<tr>
+				<td><input type="checkbox" name="godid" value="<?php echo $db['id'];?>" lay-skin="primary"></td>
+				<td><?php echo $db['shopbuy_serial'];?></td>
+				<td><?php echo $db['shopbuy_shopname'];?></td>
+				<td><?php echo $db['shopbuy_sort'];?></td>
+				<td><?php echo $db['shopbuy_num'] . " × ". $db['shopbuy_moeny'];?></td>
+				<td><?php echo $db['shopbuy_total'];?></td>
+				<td><?php echo M('user')->select("id={$db['shopbuy_username']}")[0]['user_username'];?></td>
+				<td><?php echo date("Y-m-d H:i:s",$db['shopbuy_ctime']);?></td>
+				<td><?php echo $db['shopbuy_address'];?></td>
+				<td><?php echo $db['shopbuy_goods']==1?'<span style="color:green;">已发货</span>':'<span style="color:red">未发货 </span>';?></td>
+				<td><a onclick="queryWid(this);" class="layui-btn layui-btn-mini"> 查看发货信息  <textarea id="query" class="layui-textarea" style="display: none;"><?php echo $db['shopbuy_deliver'];?></textarea></a></td>
+				<td><?php echo $db['shopbuy_type']==1?'手动发货':'自动发货';?></td>
+				<td><?php echo $db['shopbuy_ftime']==0?'未发货': date("Y-m-d H:i:s",$db['shopbuy_ftime']);?></td>
+				<td>
+					<a href="javascript:;" onclick="if(window.confirm('你确定要删除该订单吗？')){ location.href='<?php echo __URL__;?>index.php/admin/server/pub/action/delete/tpl/shopbuy/id/<?php echo $db['id'];?>/url/<?php echo Sendurl();?>'; }else{ return false;}" class="layui-btn layui-btn-danger layui-btn-mini"> 删除订单 </a>
+					</td>
+			</tr><?php }?>
+						</tbody>
+					</table>
+				</div>
+		
+
+		<div id="paged" class="page" style="margin-left: 1px;">
+			<div class="layui-box layui-laypage layui-laypage-default">
+				
+				<?php autopage($arrayPage['count'], $arrayPage['page'], 10);?>
+				
+			</div>
+		</div>
+
+	</div>
+		<script type="text/javascript" src="<?php echo __PUBLIC__;?>plugins/layui/layui.js"></script>
+		<script>
+		
+		
+		
+		layui.use('form', function(){
+			  var $ = layui.jquery, form = layui.form(),layer = layui.layer;
+			  
+			  //全选
+			  form.on('checkbox(allChoose)', function(data){
+			    var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
+			    child.each(function(index, item){
+			      item.checked = data.elem.checked;
+			    });
+			    form.render('checkbox');
+			  });
+
+		layui.use(['form', 'layedit', 'laydate'], function(){
+			  var form = layui.form()
+			  ,layer = layui.layer
+			  ,layedit = layui.layedit
+			  ,laydate = layui.laydate;
+			});
+		});
+		
+		//删除选中的
+		  function checkDelte(){//jquery获取复选框值 
+			  layui.use('form', function(){
+				  var $ = layui.jquery,layer = layui.layer;
+				  var chk_value = ''; 
+				  
+				  $('input[name="godid"]:checked').each(function(){ 
+				  chk_value += $(this).val() + ',';
+				  }); 
+				  if(chk_value.length==0){
+					  layer.msg("请选择后再进行操作!");
+				  }else{
+					 location.href='<?php echo __URL__;?>index.php/admin/server/pub/action/delete/tpl/shopbuy/id/' + chk_value+'/url/<?php echo Sendurl();?>';
+				  }
+			  
+			  });
+			}
+		
+			layui.use(['layer'], function() {
+				var $ = layui.jquery,
+					layer = layui.layer;
+		
+				$('#sendShop').on('click', function() {
+					 var con = '<div style="padding:10px;"><textarea placeholder="请输入发货信息,一般可写物流信息或者是一些重要的通知,或者是账号数据之类.." id="msg" class="layui-textarea"></textarea></div>';
+						
+						layer.open({
+							type: 1,
+							title: '商品订单发货',
+							content: con,
+							btn: ['确认发货', '取消'],
+							area: ['350px', '230px'],
+							yes: function(index, layero) {
+								var msg = $('#msg').val();
+								var chk_value = ''; 
+								  $('input[name="godid"]:checked').each(function(){ 
+								  chk_value += $(this).val() + ',';
+								  }); 
+								  if(chk_value.length==0){
+									  layer.msg("请选择订单后在进行发货!");
+								  }else{
+									  layer.msg("请稍后,正在发货..");
+									  $.ajax({
+						                    type: "GET",
+						                    dataType: "json",
+						                    url: '<?php echo __URL__;?>index.php/admin/server/Deliversend/msg/'+msg+'/id/'+chk_value,
+						                    success: function (data) {
+							                     if(data.code == "1"){
+							                    	window.setTimeout(function(){layer.msg("成功发货");},1000); 
+							                    	window.setTimeout(function(){location.href='';},1500); 
+								                 }else{
+								                	layer.msg("发送失败");
+												 } 
+						                    	
+						                    },
+						                    error: function(data) {
+						                        alert("error:"+data.responseText);
+						                     }
+									 });
+									  
+									  }
+								
+							},
+							shade :false,
+							maxmin :true
+						}); 
+
+				});
+	
+		
+			});	
+
+			function queryWid(data){
+				
+				layui.use(['layer'], function() {
+					var $ = layui.jquery,
+						layer = layui.layer;
+						var val = $(data).find('textarea').val(); 
+						 var con = '<div style="padding:10px;"><textarea class="layui-textarea" rows="16">'+val+'</textarea></div>';
+							
+							layer.open({
+								type: 1,
+								title: '发货信息查看',
+								content: con,
+								btn: [],
+								area: ['350px', '430px'],
+								yes: function(index, layero) {
+								},
+								shade :false,
+								maxmin :true
+							}); 
+			
+				});	
+				}
+
+			
+		</script>
+	
+	</body>
+
+</html>

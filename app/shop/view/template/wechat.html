@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Language" content="zh-cn">
+<meta name="renderer" content="webkit">
+<title>微信安全支付 - 值得信赖!</title>
+<script src="<?php echo __PUBLIC__;?>js/jquery-1.11.3.min.js"></script>
+<link href="<?php echo __PUBLIC__;?>css/wechat.css" rel="stylesheet" media="screen">
+
+<style>
+.switch-tip-icon-img {
+    position: absolute;
+    left: 70px;
+    top: 70px;
+    z-index: 11;
+
+}
+.shadow{  
+   -webkit-box-shadow: #666 0px 0px 10px;  
+   -moz-box-shadow: #666 0px 0px 10px;  
+   box-shadow: #666 0px 0px 10px;  
+    padding-top: 15px;
+    padding-right: 5px;
+    padding-bottom: 1px;
+    padding-left: 5px;
+   background: #FFFFFF; 
+   width:240px;
+  height:240px;
+} 
+.time-item strong {
+    background:#13A500;
+    color:#fff;
+    line-height:30px;
+    font-size:20px;
+    font-family:Arial;
+    padding:0 10px;
+    margin-right:10px;
+    border-radius:5px;
+    box-shadow:1px 1px 3px rgba(0,0,0,0.2);
+}
+h2 {
+	line-height:50px;
+    font-family:"微软雅黑";
+    font-size:16px;
+    letter-spacing:2px;
+}
+</style>
+</head>
+<body>
+<div id="suc" style="margin:0 auto; width:300px; height:900px;display:none;">
+   <textarea id="cues" rows="20" cols="50" style="margin-top:100px;border:0;border-radius:5px;font-size:15px;"></textarea>
+  </div>
+<div class="body" id="alipay">
+<h1 class="mod-title">
+<span class="ico-wechat"></span><span class="text">微信支付</span>
+</h1>
+<div class="mod-ct">
+<div class="order">
+</div>
+<div class="amount">￥<?php echo $dime_name;?>.00</div>
+<br/>
+
+<div align="center">
+<div class="shadow" ><div align="center">
+<font class="qr-image" id="qrcode">
+<img src="<?php echo $url;?>"></font></div></div>
+<h2>距离该订单过期还有</h2>
+<div class="time-item">
+<strong id="hour_show">0时</strong>
+<strong id="minute_show">0分</strong>
+    <strong id="second_show">0秒</strong>
+</div>
+
+</div>
+
+<div class="detail" id="orderDetail">
+<dl class="detail-ct" style="display: none;">
+<dt>商家</dt>
+<dd id="storeName">管理员</dd>
+<dt>购买物品</dt>
+<dd id="productName">支付充值购买</dd>
+<dt>商户订单号</dt>
+<dd id="billId"><?php echo $alipay_serial;?> </dd>
+<dt>创建时间</dt>
+<dd id="createTime"><?php echo date("Y-m-d H:i:s",time());?></dd>
+</dl>
+<a href="javascript:void(0)" class="arrow"><i class="ico-arrow"></i></a>
+</div>
+<div class="tip">
+<span class="dec dec-left"></span>
+<span class="dec dec-right"></span>
+<div class="ico-scan"></div>
+<div class="tip-text">
+<p>请使用微信扫一扫</p>
+<p>扫描二维码完成支付</p>
+</div>
+</div>
+<div class="tip-text">
+</div>
+</div>
+<div class="foot">
+<div class="inner">
+
+<p>本平台为第三方辅助软件服务商，与QQ财付通和腾讯网无任何关系，本支付系统拒绝违法网站使用</p>
+<p>在付款前请确认收款人账户信息，转账后将立即到达对方账户</p>
+</div>
+</div>
+</div>
+  <script type="text/javascript">
+var intDiff = parseInt(270);//倒计时总秒数量
+
+function timer(intDiff){
+    window.setInterval(function(){
+    var day=0,
+        hour=0,
+        minute=0,
+        second=0;//时间默认值       
+    if(intDiff > 0){
+        day = Math.floor(intDiff / (60 * 60 * 24));
+        hour = Math.floor(intDiff / (60 * 60)) - (day * 24);
+        minute = Math.floor(intDiff / 60) - (day * 24 * 60) - (hour * 60);
+        second = Math.floor(intDiff) - (day * 24 * 60 * 60) - (hour * 60 * 60) - (minute * 60);
+    }
+	if (minute == 00 && second == 00) document.getElementById('qrcode').innerHTML='<br/><br/><br/><br/><br/><h2>二维码超时 请重新发起交易</h2><br/><br/><br/>';
+    if (minute <= 9) minute = '0' + minute;
+    if (second <= 9) second = '0' + second;
+    $('#day_show').html(day+"天");
+    $('#hour_show').html('<s id="h"></s>'+hour+'时');
+    $('#minute_show').html('<s></s>'+minute+'分');
+    $('#second_show').html('<s></s>'+second+'秒');
+    intDiff--;
+    }, 1000);
+} 
+$(function(){
+    timer(intDiff);
+});
+ 
+
+var pay = setInterval(function(){
+	$.get("<?php echo __URL__;?>index.php/shop/index/payment/alipay_serial/<?php echo $alipay_serial;?>/itemId/<?php echo $itemId;?>/cardId/<?php echo $cardId;?>",function(data,e){
+		if(data.code == '1'){
+				//支付成功
+			$("#cues").val("恭喜您支付购买成功,下面则是你的购卡信息:"+data.data);
+			$("#suc").show();
+			$("#alipay").hide();
+			clearTimeout(pay);
+		   }
+		});
+},3000);
+//订单详情
+$('#orderDetail .arrow').click(function (event) {
+    if ($('#orderDetail').hasClass('detail-open')) {
+        $('#orderDetail .detail-ct').slideUp(500, function () {
+            $('#orderDetail').removeClass('detail-open');
+        });
+    } else {
+        $('#orderDetail .detail-ct').slideDown(500, function () {
+            $('#orderDetail').addClass('detail-open');
+        });
+    }
+});
+
+ 
+</script>
+</body>
+</html>

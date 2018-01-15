@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="<?php echo __PUBLIC__;?>h5/style.css">
+    <link rel="stylesheet" href="<?php echo __PUBLIC__;?>h5/swiper-3.4.2.min.css">
+    <title>Document</title>
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function() {
+            var html = document.documentElement;
+            var windowWidth = html.clientWidth;
+            html.style.fontSize = windowWidth / 6.4 + 'px';
+        }, false);
+    </script>
+    <style>
+        .swiper-container {
+            width: 100%;
+            height: 3rem;
+        }
+        .swiper-container img {
+            width: 100%;
+            height: 100%;
+        }
+        .img-wrapper {
+            margin: 10px 2px;
+        }
+        .img-item {
+            float: left;
+            width: 49%;
+            margin-bottom: 3px;
+            border: 1px solid #666;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        .img-item:nth-child(2n) {
+            margin-left: 2%;
+        }
+        .sw-slide a {
+            display: block;
+            width: 100%;
+        }
+        .img-item img {
+            display: block;
+            width: 100%;
+            height: 1.8rem;
+        }
+        .img-item p {
+            margin: 0;
+            line-height: 2em;
+            font-size: .24rem;
+            text-align: center;
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+    <div class="swiper-container">
+        <div class="swiper-wrapper">
+            <?php foreach($data as $db) {?>
+            <?php if($db['type'] == 4){
+            echo "<div class='swiper-slide'>
+            <a href='".$db['url']."'>
+                <img src='/photo/".$db['path']."'>
+            </a>
+        </div>";
+            }?>
+            <?php } ?>
+
+        </div>
+        <div class="swiper-pagination"></div>
+    </div>
+
+    <div class="img-wrapper">
+        <?php foreach($data as $db) {?>
+        <?php if($db['type'] == 2){
+           echo "<a href='".$db['url']."'><div class='img-item'><img src='/photo/".$db['path']."' ><p>".$db['name']."</p></div></a>";
+        }?>
+        <?php } ?>
+    </div>
+    <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+    <script src="<?php echo __PUBLIC__;?>h5/swiper-3.4.2.jquery.min.js"></script>
+    <script>
+        $(window).load(function() {
+            var mySwiper = new Swiper ('.swiper-container', {
+                loop: true,
+                // 如果需要分页器
+                pagination: '.swiper-pagination',
+            })
+        });
+    </script>
+</body>
+</html>

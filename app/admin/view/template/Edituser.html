@@ -1,0 +1,53 @@
+<div style="margin: 15px;">
+	<form class="layui-form" id="formEditHandlingFee">
+		<div class="layui-form-item">
+			<label class="layui-form-label">用户名</label>
+			<div class="layui-input-block">
+				<input type="text" name="user_username" value="<?php echo explode('-', $user['user_username'])[1];?>" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">密  码</label>
+			<div class="layui-input-block">
+			<input type="password" name="user_password" placeholder="不重置密码留空即可.." class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">安全密码</label>
+			<div class="layui-input-block">
+			<input type="password" name="user_passwordsec" placeholder="不重置密码留空即可.." class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">设备代码</label>
+			<div class="layui-input-block">
+				<input type="text" name="user_device" value="<?php echo $user['user_device'];?>" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">手机号码</label>
+			<div class="layui-input-block">
+				<input type="text" name="user_mobile" value="<?php echo explode('-', $user['user_mobile'])[1];?>" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">邮箱账户</label>
+			<div class="layui-input-block">
+				<input type="text" name="user_email" value="<?php echo explode('-', $user['user_email'])[1];?>" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">账户(BUY)</label>
+			<div class="layui-input-block">
+				<input type="text" name="user_account" value="<?php echo $user['user_account'];?>" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">登录次数</label>
+			<div class="layui-input-block">
+				<input type="text" name="user_loginNum" value="<?php echo $user['user_loginNum'];?>" class="layui-input">
+			</div>
+		</div>
+		<button lay-filter="edit" lay-submit style="display: none;"></button>
+	</form>
+</div>

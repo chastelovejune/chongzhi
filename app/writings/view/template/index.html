@@ -1,0 +1,203 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title><?php echo $set['configwrit_title'];?></title>
+<meta name="keywords" content="<?php echo $set['configwrit_keywrod'];?>" />
+<meta name="description" content="<?php echo $set['configwrit_introduction'];?>" />
+<link href="<?php echo __PUBLIC__;?>css/base.css?v=1.3" rel="stylesheet">
+<link href="<?php echo __PUBLIC__;?>css/index.css?v=1.0" rel="stylesheet">
+<script type="text/javascript" src="<?php echo __PUBLIC__;?>js/jquery.min.js"></script>
+<script type="text/javascript" src="<?php echo __PUBLIC__;?>js/sliders.js"></script>
+<!--[if lt IE 9]>
+<script src="js/modernizr.js"></script>
+<![endif]-->
+<!-- 返回顶部调用 begin -->
+<script type="text/javascript" src="<?php echo __PUBLIC__;?>js/up/jquery.js"></script>
+<script type="text/javascript" src="<?php echo __PUBLIC__;?>js/up/js.js"></script>
+<!-- 返回顶部调用 end-->
+<style type="text/css">
+body{
+	font-family: 微软雅黑;
+}
+</style>
+</head>
+<body>
+<div class="mao"></div>
+<header >
+  <!-- <div class="logo f_l"> <a href=""><img src="<?php echo __PUBLIC__;?>images/logo.png"></a> </div> -->
+  <nav id="topnav" class="f_r">
+    <ul>
+      <a href="<?php echo __URL__;?>">主页</a>
+      <a href="<?php echo __URL__;?>index.php/admin/index/login" target="_blank">后台登录</a>
+      <a href="<?php echo __URL__;?>index.php/agent/index/login" target="_blank">代理登录</a>
+      <a href="#" >留言</a>
+      <a href="#">关于博主</a>
+    </ul>
+    <script src="<?php echo __PUBLIC__;?>js/nav.js"></script> 
+  </nav>
+</header>
+<div class="topbg"></div>
+<article>
+  <div class="l_box f_l">
+    <div class="banner">
+      <div id="slide-holder">
+        <div id="slide-runner">
+        <?php //取所有带图片的文章总数
+            $textImged = M('writings')->select("writings_imgurl<>'0'",null,'id','0,5');
+            foreach ($textImged as $titd){
+            ?>
+        <a href="<?php echo _w_url(__URL__, $titd['id'], 3, $set['configwrit_static'])?>"><img id="slide-img-<?php echo $titd['id'];?>" src="<?php echo $titd['writings_imgurl'];?>"  alt="<?php echo $titd['writings_title'];?>" /></a>
+            <?php }?>
+          <div id="slide-controls">
+            <p id="slide-client" class="text"><strong></strong><span></span></p>
+            <p id="slide-desc" class="text"></p>
+            <p id="slide-nav"></p>
+          </div>
+        </div>
+      </div>
+      <script>
+	  if(!window.slider) {
+		var slider={};
+	}
+
+	slider.data= [
+		          	<?php  foreach ($textImged as $tid){ ?>
+    {
+        "id":"slide-img-<?php echo $tid['id'];?>", // 与slide-runner中的img标签id对应
+        "client":"最新焦点",
+        "desc":"<?php echo $tid['writings_title'];?>" //这里修改描述
+    },
+    				<?php }?>
+	];
+
+	  </script> 
+    </div>
+    <!-- banner代码 结束 -->
+    <div class="topnews">
+      <h2><span><?php foreach ($writingsrt as $rt){ if ($rt['writingsrt_pid']==0){?><a href="<?php echo _w_url(__URL__, $rt['id'], 1, $set['configwrit_static'])?>"><?php echo $rt['writingsrt_name'];?></a><?php } }?></span><b>最新</b>文章</h2>
+      
+      <?php
+      //初始化默认图片
+      $array = array('01.jpg','02.jpg','03.jpg','04.jpg','05.jpg','06.jpg');
+      foreach ($data as $d){?>
+      <div class="blogs">
+        <figure><img style="height: 136.73px;" src="<?php echo $d['writings_imgurl'] != '0' ? $d['writings_imgurl'] : __PUBLIC__.'images/'.$array[array_rand($array)];?>"></figure>
+        <ul>
+          <h3><a href="<?php echo _w_url(__URL__, $d['id'], 3, $set['configwrit_static'])?>"><?php echo $d['writings_title'];?></a></h3>
+          <p><?php echo mb_substr(strip_tags($d['writings_content']), 0,150,"UTF-8")?>..</p>
+          <p class="autor"><span class="lm f_l"><a href="<?php echo _w_url(__URL__, $d['writings_rid'], 1, $set['configwrit_static'])?>"><?php echo M('writingsrt')->select("id={$d['writings_rid']}")[0]['writingsrt_name'];?></a></span><span class="dtime f_l"><?php echo date("Y-m-d",$d['writings_ctime']);?></span><span class="viewnum f_r">浏览（<a href="/"><?php echo $d['writings_view'];?></a>）</span><span class="pingl f_r">评论（<?php echo rand(0, 9999);?>）</span></p>
+        </ul>
+      </div>
+      <?php }?>
+
+    </div>
+    
+    <div class="pages">
+    <?php autopage_wkii($arrayPage['count'], $arrayPage['page'], 10,__URL__,$set['configwrit_static']);?>
+    </div>
+  </div>
+  <div class="r_box f_r">
+    <div class="tit01">
+      <h3>关注我</h3>
+      <div class="gzwm">
+        <ul>
+          <li><a class="xlwb" href="#">新浪微博</a></li>
+          <li><a class="txwb" href="#">腾讯微博</a></li>
+          <li><a class="rss" href="#">RSS</a></li>
+          <li><a class="wx" href="#">邮箱</a></li>
+        </ul>
+      </div>
+    </div>
+    <!--tit01 end-->
+    <!--<div class="ad300x100"> <img src="<?php echo __PUBLIC__;?>images/ad300x100.jpg" width="300" height="100"> </div>-->
+    <div class="moreSelect" id="lp_right_select"> 
+      <script>
+window.onload = function ()
+{
+	var oLi = document.getElementById("tab").getElementsByTagName("li");
+	var oUl = document.getElementById("ms-main").getElementsByTagName("div");
+	
+	for(var i = 0; i < oLi.length; i++)
+	{
+		oLi[i].index = i;
+		oLi[i].onmouseover = function ()
+		{
+			for(var n = 0; n < oLi.length; n++) oLi[n].className="";
+			this.className = "cur";
+			for(var n = 0; n < oUl.length; n++) oUl[n].style.display = "none";
+			oUl[this.index].style.display = "block"
+		}	
+	}
+}
+</script>
+      <div class="ms-top">
+        <ul class="hd" id="tab">
+          <li class="cur"><a href="<?php echo _w_url(__URL__, 2, 2, $set['configwrit_static'])?>">推荐文章</a></li>
+          <li><a href="<?php echo _w_url(__URL__, 1, 2, $set['configwrit_static'])?>">热门文章</a></li>
+        </ul>
+      </div>
+      <div class="ms-main" id="ms-main">
+        <div style="display: block;" class="bd bd-news" >
+          <ul>
+          <?php //取推荐
+                $tui = M('writings')->select("writings_groom = 2",null,'id','0,6');
+                foreach ($tui as $t){
+           ?>
+            <li><a href="<?php echo _w_url(__URL__, $t['id'], 3, $set['configwrit_static'])?>"><?php echo $t['writings_title'];?></a></li>
+            <?php }?>
+          </ul>
+        </div>
+        <div  class="bd bd-news">
+          <ul>
+          <?php //热门
+                $re = M('writings')->select("writings_view > {$set['configwrit_hotnum']}",null,'id','0,6');
+                foreach ($re as $r){
+           ?>
+            <li><a href="<?php echo _w_url(__URL__, $r['id'], 3, $set['configwrit_static'])?>"><?php echo $r['writings_title'];?></a></li>
+         <?php }?>
+          </ul>
+        </div>
+ 
+      </div>
+      <!--ms-main end --> 
+    </div>
+    <!--切换卡 moreSelect end -->
+    
+    <div class="cloud">
+      <h3>分类云</h3>
+      <ul>
+       <?php foreach ($writingsrt as $w){?>
+        <li><a href="<?php echo _w_url(__URL__, $w['id'], 1, $set['configwrit_static'])?>"><?php echo $w['writingsrt_name'];?></a></li>
+       <?php }?>
+      </ul>
+    </div>
+    <div class="tuwen">
+      <h3>随机图文</h3>
+      <ul>
+      <?php //取所有带图片的文章总数
+            $textImg = M('writings')->select("writings_imgurl<>'0'",null,'rand()','0,6');
+            foreach ($textImg as $ti){
+           ?>
+        <li><a href="<?php echo _w_url(__URL__, $ti['id'], 3, $set['configwrit_static'])?>"><img height="57" src="<?php echo $ti['writings_imgurl'];?>"><b><?php echo mb_substr($ti['writings_title'], 0,12,"UTF-8");?>..</b></a>
+          <p><span class="tulanmu"><a href="<?php echo _w_url(__URL__, $ti['writings_rid'], 1, $set['configwrit_static'])?>"><?php echo M('writingsrt')->select("id={$ti['writings_rid']}")[0]['writingsrt_name'];?></a></span><span class="tutime"><?php echo date("Y-m-d",$ti['writings_ctime']);?></span></p>
+        </li>
+      <?php }?>
+      </ul>
+    </div>
+    <div class="ad"> <img src="<?php echo __PUBLIC__;?>images/03.jpg"> </div>
+    <!--<div class="links" style="margin-bottom: 10px">-->
+      <!--<h3><span>[<a href="http://wpa.qq.com/msgrd?v=3&uin=3544322062&site=qq&menu=yes">申请</a>]</span>友情链接</h3>-->
+      <!--<ul>-->
+        <!--<li><a href="./">GOD官网</a></li>-->
+      <!--</ul>-->
+    <!--</div>-->
+  </div>
+  <!--r_box end --> 
+</article>
+<footer>
+  <p class="ft-copyright">GOD Design by 心剑</p>
+  <div id="tbox"> <a id="togbook" href="/"></a> <a id="gotop" href="javascript:void(0)"></a> </div>
+</footer>
+</body>
+</html>

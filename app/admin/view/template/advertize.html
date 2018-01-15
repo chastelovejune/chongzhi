@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>广告管理</title>
+		<link rel="stylesheet" href="<?php echo __PUBLIC__;?>plugins/layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="<?php echo __PUBLIC__;?>css/global.css?v=1.2" media="all">
+		<link rel="stylesheet" href="<?php echo __PUBLIC__;?>css/table.css" />
+		<style type="text/css">
+        .layui-table td{
+        	font-size: 13px;
+        }
+        </style>
+	</head>
+
+	<body>
+		<div class="admin-main">
+
+			<blockquote class="layui-elem-quote">
+				<a href="javascript:;" class="layui-btn layui-btn-small" id="add">
+					<i class="layui-icon">&#xe608;</i> 增加广告
+				</a>
+				<a href="javascript:;" class="layui-btn layui-btn-small" onclick="checkDelte();">
+					<i class="layui-icon">&#xe640;</i> 删除
+				</a>
+			</blockquote>
+
+				<div class="layui-form">
+					<table class="layui-table admin-table">
+					
+						<thead>
+							<tr>
+								<th style="width: 30px;"><input type="checkbox" lay-skin="primary" lay-filter="allChoose"></th>
+								<th>广告名称</th>
+								<th>链接</th>
+								<th>排序</th>
+								<th>广告图</th>
+								<th>类型</th>
+								<th>生成时间</th>
+								<th>操作</th>
+							</tr>
+						</thead>
+						
+						<tbody>
+						<?php  if(empty($data)){echo '<tr><td colspan="16" style="color:green;text-align:center;">没有任何数据..</td></tr>';}?>
+						<?php foreach($data as $db){?>
+		  		<tr>
+				<td><input type="checkbox" name="godid" value="<?php echo $db['id'];?>" lay-skin="primary"></td>
+				<td><?php echo $db['name'];?></td>
+				<td><?php echo $db['url'];?></td>
+				<td><?php echo $db['sort'];?></td>
+				<td><img src="<?php echo '/photo/'.$db['path'];?>" width="60" height="60"></td>
+				<td><?php if($db['type'] == 1) {
+						echo '启动图';
+				}elseif($db['type'] == 2){
+						echo '平台下载';
+				}elseif($db['type'] == 3){
+					echo '游戏下载';
+				}else{
+					echo '首页轮播图';
+				}
+				?></td>
+				<td><?php echo date('Y-m-d H:i:s',$db['create_time']);?></td>
+				<td>
+					<a data-id="<?php echo $db['id'];?>" onclick="edit(this)" class="layui-btn layui-btn-mini">修改</a>
+					<!--<a href="<?php echo __URL__;?>index.php/admin/server/Frozenuser/id/<?php echo $db['id'];?>/url/<?php echo Sendurl();?>" class="layui-btn layui-btn-mini <?php echo $db['user_frozen']==1?'layui-btn-normal':'layui-btn-warm';?>"><?php echo $db['user_frozen']==1?'冻结':'解冻';?></a>-->
+					<a href="javascript:;" onclick="if(window.confirm('你确定要删除吗？')){ location.href='<?php echo __URL__;?>index.php/admin/server/pub/action/delete/tpl/advimage/id/<?php echo $db['id'];?>/url/<?php echo Sendurl();?>'; }else{ return false;}" class="layui-btn layui-btn-danger layui-btn-mini">删除</a>
+				</td>
+			</tr><?php }?>
+						</tbody>
+					</table>
+				</div>
+		
+
+		<div id="paged" class="page" style="margin-left: 1px;">
+			<div class="layui-box layui-laypage layui-laypage-default">
+				
+				<?php autopage($arrayPage['count'], $arrayPage['page'], 10);?>
+				
+			</div>
+		</div>
+
+	</div>
+		<script type="text/javascript" src="<?php echo __PUBLIC__;?>plugins/jquery.js"></script>
+		<script type="text/javascript" src="<?php echo __PUBLIC__;?>plugins/jquery.validation.min.js"></script>
+		<script type="text/javascript" src="<?php echo __PUBLIC__;?>plugins/jquery.form.js"></script>
+		<script type="text/javascript" src="<?php echo __PUBLIC__;?>plugins/layui/layui.js"></script>
+		<script>
+
+		layui.use('form', function(){
+			  var $ = layui.jquery, form = layui.form(),layer = layui.layer;
+			  
+			  //全选
+			  form.on('checkbox(allChoose)', function(data){
+			    var child = $(data.elem).parents('table').find('tbody input[type="checkbox"]');
+			    child.each(function(index, item){
+			      item.checked = data.elem.checked;
+			    });
+			    form.render('checkbox');
+			  });
+
+		layui.use(['form', 'layedit', 'laydate'], function(){
+			  var form = layui.form()
+			  ,layer = layui.layer
+			  ,layedit = layui.layedit
+			  ,laydate = layui.laydate;
+			});
+		});
+		
+		//删除选中的
+		  function checkDelte(){//jquery获取复选框值 
+			  layui.use('form', function(){
+				  var $ = layui.jquery,layer = layui.layer;
+				  var chk_value = ''; 
+				  
+				  $('input[name="godid"]:checked').each(function(){ 
+				  chk_value += $(this).val() + ',';
+				  }); 
+				  if(chk_value.length==0){
+					  layer.msg("请选择后再进行操作!");
+				  }else{
+					 location.href='<?php echo __URL__;?>index.php/admin/server/pub/action/delete/tpl/advimage/id/' + chk_value+'/url/<?php echo Sendurl();?>';
+				  }
+			  
+			  });
+			}
+	
+			layui.use(['layer'], function() {
+				var $ = layui.jquery,
+					layer = layui.layer;
+		
+				//这个是点击之后才添加的。
+				var addBoxIndex = -1;
+				$('#add').on('click', function() {
+					if(addBoxIndex !== -1)
+						return;
+					//本表单通过ajax加载 --以模板的形式，当然你也可以直接写在页面上读取
+					$.get('<?php echo __URL__;?>index.php/admin/index/addadv', null, function(form) {
+						addBoxIndex = layer.open({
+							type: 1,
+							title: '添加广告',
+							content: form,
+							btn: ['确认添加', '取消'],
+							shade: false,
+							offset: ['100px', '30%'],
+							area: ['600px', '400px'],
+							zIndex: 19950924,
+							maxmin: true,
+							yes: function(index) {
+								//触发表单的提交事件
+								$('form.layui-form').find('button[lay-filter=edit]').click();
+							},
+							full: function(elem) {
+								var win = window.top === window.self ? window : parent.window;
+								$(win).on('resize', function() {
+									var $this = $(this);
+									elem.width($this.width()).height($this.height()).css({
+										top: 0,
+										left: 0
+									});
+									elem.children('div.layui-layer-content').height($this.height() - 95);
+								});
+							},
+							success: function(layero, index) {
+								//弹出窗口成功后渲染表单
+								var form = layui.form();
+								form.render();
+								form.on('submit(edit)', function(data) {
+                                    var _data = $('#formAddHandlingFee');
+                                    if(_data){
+                                        var sub_data = new FormData(_data[0]); //可以接受type=file数据
+                                    }
+
+									$.ajax({
+					                    type: "POST",
+					                    dataType: "json",
+					                    url: '<?php echo __URL__;?>index.php/admin/server/addadv',
+					                    data: sub_data,
+                                        async: false,
+                                        cache: false,
+                                        contentType: false,
+                                        processData: false,
+					                    success: function (data) {
+						                     if(data.code == "1"){
+						                    	layer.msg("添加成功");
+						                    	location.href='';
+							                 }else{
+							                	layer.msg("添加失败");
+											 } 
+					                    	
+					                    },
+					                    error: function(data) {
+					                        alert("error:"+data.responseText);
+					                     }
+						 });
+									
+									
+									
+									
+									return false; //阻止表单跳转。						
+								});
+								//console.log(layero, index);
+							},
+							end: function() {
+								addBoxIndex = -1;
+							}
+						});
+					});
+				});
+
+				
+
+			});
+			
+			//这个是点击之后才添加的。
+			 function edit(data) {
+				 //获取当前ID
+				 layui.use(['layer'], function() {
+						var $ = layui.jquery,
+							layer = layui.layer;
+						//这个是点击之后才添加的。
+						var addBoxIndex = -1;
+						var vid = data.attributes['data-id'].nodeValue;
+						if(addBoxIndex !== -1)
+								return;
+							//本表单通过ajax加载 --以模板的形式，当然你也可以直接写在页面上读取
+							$.get('<?php echo __URL__;?>index.php/admin/index/editadv/id/'+vid, null, function(form) {
+								addBoxIndex = layer.open({
+									type: 1,
+									title: '修改广告',
+									content: form,
+									btn: ['确认修改', '取消'],
+									shade: false,
+									offset: ['100px', '30%'],
+									area: ['600px', '400px'],
+									zIndex: 19950924,
+									maxmin: true,
+									yes: function(index) {
+										//触发表单的提交事件
+										$('form.layui-form').find('button[lay-filter=edit]').click();
+									},
+									full: function(elem) {
+										var win = window.top === window.self ? window : parent.window;
+										$(win).on('resize', function() {
+											var $this = $(this);
+											elem.width($this.width()).height($this.height()).css({
+												top: 0,
+												left: 0
+											});
+											elem.children('div.layui-layer-content').height($this.height() - 95);
+										});
+									},
+									success: function(layero, index) {
+										//弹出窗口成功后渲染表单
+										var form = layui.form();
+										form.render();
+										form.on('submit(edit)', function(data) {
+                                            var _data = $('#formAddHandlingFee');
+                                            if(_data.valid()){
+                                                var sub_data = new FormData(_data[0]); //可以接受type=file数据
+                                            }
+                                            console.log(sub_data);
+											$.ajax({
+							                    type: "POST",
+							                    dataType: "json",
+							                    url: '<?php echo __URL__;?>index.php/admin/server/editadv/id/'+vid,
+							                    data: sub_data,
+                                                async: false,
+                                                cache: false,
+                                                contentType: false,
+                                                processData: false,
+							                    success: function (data) {
+								                     if(data.code == "1"){
+								                    	layer.msg("修改成功");
+								                    	location.href='';
+									                 }else{
+									                	layer.msg("修改失败");
+									                	location.href='';
+													 } 
+							                    	
+							                    },
+							                    error: function(data) {
+							                        alert("error:"+data.responseText);
+							                     }
+								 });
+											
+											return false; //阻止表单跳转。						
+										});
+										//console.log(layero, index);
+									},
+									end: function() {
+										addBoxIndex = -1;
+									}
+								});
+							});
+						
+					});
+				
+			};
+			
+			
+			
+		</script>
+	
+	</body>
+
+</html>

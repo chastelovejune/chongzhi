@@ -1,0 +1,32 @@
+<div style="margin: 15px;">
+	<form class="layui-form" id="formEditHandlingFee">
+	  
+		<div class="layui-form-item">
+			<label class="layui-form-label">用户名</label>
+			<div class="layui-input-block">
+				<input type="text" name="man_username" value="<?php echo $data['man_username'];?>" placeholder="尽量使用英文.." class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">登录密码</label>
+			<div class="layui-input-block">
+			<input type="password" name="man_password" placeholder="不修改密码请留空.." class="layui-input">
+			</div>
+		</div>
+		
+		<div class="layui-form-item">
+			<label class="layui-form-label">邮箱地址</label>
+			<div class="layui-input-block">
+				<input type="text" name="man_email" value="<?php echo $data['man_email'];?>" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">QQ账号</label>
+			<div class="layui-input-block">
+				<input type="text" name="man_qq" value="<?php echo $data['man_qq'];?>" class="layui-input">
+			</div>
+		</div>
+		
+		<button lay-filter="edit" lay-submit style="display: none;"></button>
+	</form>
+</div>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<title>登录 - GOD网络验证!</title>
+		<link rel="stylesheet" href="<?php echo __PUBLIC__;?>plugins/layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="<?php echo __PUBLIC__;?>css/login.css?v=1.0" />
+	</head>
+
+	<body class="beg-login-bg">
+		<div class="beg-login-box">
+			<header>
+				<h1>LOGIN</h1>
+			</header>
+			<div class="beg-login-main">
+				<form class="layui-form" action="<?php echo __URL__;?>index.php/admin/server/login" method="post">
+				<input name="<?php echo $tokenname;?>" type="hidden" value="<?php echo $token;?>" />
+					<div class="layui-form-item">
+						<label class="beg-login-icon">
+                        <i class="layui-icon">&#xe612;</i>
+                    </label>
+						<input type="text" name="<?php echo $username;?>" lay-verify="username" autocomplete="off" placeholder="请输入用户名.." class="layui-input">
+					</div>
+					<div class="layui-form-item">
+						<label class="beg-login-icon">
+                        <i class="layui-icon">&#xe642;</i>
+                    </label>
+						<input type="password" name="<?php echo $password;?>" lay-verify="password" autocomplete="off" placeholder="请输入密码.." class="layui-input">
+					</div>
+					<div class="layui-form-item">
+						<div class="beg-pull-left beg-login-remember">
+							<label style="color:black;">机器人识别? </label>
+							<input type="checkbox" name="rememberMe" value="true" lay-skin="switch" checked title="记住帐号">
+						</div>
+						<div class="beg-pull-right">
+							<button class="layui-btn layui-btn-primary" lay-submit lay-filter="login">
+                            <i class="layui-icon">&#xe63d;</i> 登 录
+                        </button>
+						</div>
+						<div class="beg-clear"></div>
+					</div>
+				</form>
+			</div>
+			<footer>
+				<p style="color:black;">© 2017 GOD</p>
+			</footer>
+		</div>
+		<script type="text/javascript" src="<?php echo __PUBLIC__;?>plugins/layui/layui.js"></script>
+		<script>
+		
+			layui.use(['layer', 'form'], function() {
+				var layer = layui.layer,
+					$ = layui.jquery,
+					form = layui.form();
+				    
+			});
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,68 @@
+<div style="margin: 15px;">
+	<form class="layui-form" id="formEditHandlingFee">
+	     
+		
+		<div class="layui-form-item">
+			<label class="layui-form-label">价格类</label>
+			<div class="layui-input-block">
+				<input type="text" name="dime_name" value="<?php echo $dime['dime_name'];?>" class="layui-input">
+			</div>
+		</div>
+		
+		<div class="layui-form-item">
+			<label class="layui-form-label">真实金额</label>
+			<div class="layui-input-block">
+				<input type="text" name="dime_price" value="<?php echo $dime['dime_price'];?>" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">支付宝码</label>
+			<div class="layui-input-block">
+				<input type="text" name="dime_alipayurl" value="<?php echo $dime['dime_alipayurl'];?>" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">微信二维码</label>
+			<div class="layui-input-block">
+				<input type="text" name="dime_wxurl" value="<?php echo $dime['dime_wxurl'];?>" class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			   <div class="layui-input-block">
+							<a class="layui-btn layui-btn-small layui-btn-normal" id="upload">上传图片</a>
+				</div>
+		</div>
+	
+		<div class="layui-form-item">
+			<div class="layui-input-block">
+				价格类就是在外面显示的价格，一般每个价格会生成20个二维码，比如10块钱，那么你就要生成20.01-20.20左右个二维码,如果你的业务量巨大,或者可以生成更多,真实金额就是生成二维码的金额是多少就填多少,如果填错,则无法充值到账户!
+			</div>
+		</div>
+		<button lay-filter="edit" lay-submit style="display: none;"></button>
+	</form>
+</div><script>
+
+layui.use(['layer'], function() {
+	var $ = layui.jquery,
+		layer = layui.layer;
+
+	$('#upload').on('click', function() {
+		 var con = '<iframe style="margin-top:-150px;" src="http://www.tietuku.com/upload" frameBorder="0" width="100%" scrolling="no" height="100%"></iframe>';
+			
+			layer.open({
+				type: 1,
+				title: '上传图片-贴图库',
+				content: con,
+				area: ['960px', '660px'],
+				yes: function(index, layero) {},
+				shade :false,
+				maxmin :true
+			}); 
+
+	});
+
+	
+
+});
+
+</script>

@@ -1,0 +1,81 @@
+		<?php include 'header.html';?>
+    
+		<div class=profile-env>
+		<div class="row">
+		<div class="col-md-12">
+		<button type="button" class="btn btn-success btn-sm" onclick="jQuery('#modal-add-comment').modal('show');">添加代理</button>
+		
+		</div>
+		
+		</div>
+		
+		<div class="row">
+			
+			<div class="col-md-12">
+				
+				<h4></h4>
+				
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>用户名</th>
+							<th>QQ账号</th>
+							<th>利润点数</th>
+							<th>带来利润</th>
+							<th>账户状态</th>
+							<th>下级权限</th>
+							<th>绑定软件</th>
+						</tr>
+					</thead>
+					
+					<tbody>
+					<?php if (empty($data)){?>
+					<tr>
+							<td colspan="7" style="text-align: center;">当前还没有代理为你带来利润，请加大力度扩展你的代理圈，人生大赢家，从你做起！</td>
+					</tr>
+					<?php }?>
+					<?php foreach ($data as $db){?>
+						<tr>
+							<td><?php echo $db['id'];?></td>
+							<td><?php echo $db['agent_username'];?></td>
+							<td><?php echo $db['agent_qq'];?></td>
+							<td><?php echo $db['agent_profit'];?> &nbsp; &nbsp;<button style="margin-top:-2px;" type="button" class="btn btn-xs" onclick="getAgent(this);" data-id="<?php echo $db['id'];?>"> 修改</button></td>
+							<td><?php echo $db['agent_profitnum'];?></td>
+							<td><?php echo $db['agent_freeze']==1?'正常':'已冻结';?></td>
+							<td><?php echo $db['agent_power']==1?'有':'无';?></td>
+							<td><?php
+							
+							$it = explode(",", $db['agent_itemid']);
+							
+							$j = '';
+							
+							for ($i=0;$i<count($it);$i++){
+							    $j .= M("item")->select("id={$it[$i]}")[0]['item_name'] . ",";    
+							}
+							
+							echo trim($j,",");
+							
+							?></td>
+						</tr>
+				    <?php }?>
+						
+					</tbody>
+				</table>
+				
+				<?php autopage($arrayPage['count'], $arrayPage['page'], 10);?>
+				
+			</div>
+			
+		</div>
+		
+	
+		</div>
+		
+		<script src="<?php echo __PLUG__;?>emoji/lib/script/jquery.min.js"></script>
+        <script src="<?php echo __PLUG__;?>emoji/lib/script/highlight.pack.js"></script>
+        <script src="<?php echo __PLUG__;?>emoji/lib/script/jquery.mousewheel-3.0.6.min.js"></script>
+        <script src="<?php echo __PLUG__;?>emoji/lib/script/jquery.mCustomScrollbar.min.js"></script>
+        <script src="<?php echo __PLUG__;?>emoji/dist/js/jquery.emoji.min.js"></script>
+        <?php include 'myprofit.h';?>
+		<?php include 'footer.html';?>

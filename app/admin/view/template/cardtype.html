@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>充值卡类型</title>
+		<link rel="stylesheet" href="<?php echo __PUBLIC__;?>plugins/layui/css/layui.css" media="all" />
+		<link rel="stylesheet" href="<?php echo __PUBLIC__;?>css/global.css" media="all">
+		<link rel="stylesheet" href="<?php echo __PUBLIC__;?>css/table.css" />
+	</head>
+
+	<body>
+		<div class="admin-main">
+
+			<blockquote class="layui-elem-quote">
+				<a href="javascript:;" class="layui-btn layui-btn-small" id="add">
+					<i class="layui-icon">&#xe608;</i> 添加类型
+				</a>
+			</blockquote>
+		
+				
+				<div class=" layui-form">
+					<table class="layui-table admin-table">
+						<thead>
+							<tr>
+								<th style="width: 50px;">类型ID</th>
+								<th>类型名称</th>
+								<th>类型数值</th>
+								<th>绑定软件</th>
+								<th>市场单价</th>
+								<th>操作</th>
+							</tr>
+						</thead>
+						<tbody>
+						<?php  if(empty($data)){echo '<tr><td colspan="5" style="color:green;text-align:center;">没有任何数据..</td></tr>';}?>
+						<?php foreach($data as $db){?>
+		  <tr>
+				<td><?php echo $db['id'];?></td>
+				<td><?php echo $db['cardtype_name'];?></td>
+				<td style="color:green;"><?php echo $db['cardtype_num'];?></td>
+				<td><?php $imp = explode(",", $db['cardtype_itemid']);$j='';for ($i=0;$i<count($imp);$i++){ $j .=  M("item")->select("id={$imp[$i]}")[0]['item_name'] . ',';}  echo trim($j,",");?></td>
+				<td><?php echo $db['cardtype_me'];?></td>
+				<td>
+					<a data-id="<?php echo $db['id'];?>" onclick="edit(this)" class="layui-btn layui-btn-mini">修改</a>
+					<a href="javascript:;" onclick="if(window.confirm('你确定要删除吗？')){ location.href='<?php echo __URL__;?>index.php/admin/server/Deletecardtype/id/<?php echo $db['id'];?>'; }else{ return false;}" class="layui-btn layui-btn-danger layui-btn-mini">删除</a>
+				</td>
+				
+			</tr><?php }?>
+						</tbody>
+					</table>
+				</div>
+		
+			
+				<div id="paged" class="page" style="margin-left: 1px;">
+			     <div class="layui-box layui-laypage layui-laypage-default">
+				
+				<?php autopage($arrayPage['count'], $arrayPage['page'], 10);?>
+				
+			     </div>
+		          </div>
+			
+		</div>
+		<script type="text/javascript" src="<?php echo __PUBLIC__;?>plugins/layui/layui.js"></script>
+		<script>
+		
+
+		//这个是点击之后才添加的。
+		 function edit(data) {
+			 layui.use(['layer'], function() {
+
+					var $ = layui.jquery,
+					layer = layui.layer;
+					var vid = data.attributes['data-id'].nodeValue;
+					$.get("<?php echo __URL__;?>index.php/admin/server/Viewcardtype/id/"+vid,function(data,status){
+						var cardtype_name = data.data[0].cardtype_name;
+						var cardtype_num = data.data[0].cardtype_num;
+						var cardtype_me = data.data[0].cardtype_me;
+						var con = '<form id="formEditHandlingFee"><div style="padding:10px;"><input type="text" class="layui-input" style="margin-bottom:5px;" name="cardtype_name" value="'+cardtype_name+'" />'+
+						'<input type="text" class="layui-input" style="margin-bottom:5px;" name="cardtype_num" value="'+cardtype_num+'" />'+'<input type="text" class="layui-input" style="margin-bottom:5px;" name="cardtype_me" value="'+cardtype_me+'" />'+
+						'</div></form>';
+
+						layer.open({
+							type: 1,
+							title: '修改类型',
+							content: con,
+							btn: ['确定修改', '取消'],
+							area: ['350px', '250px'],
+							yes: function(index, layero) {
+		
+								$.ajax({
+						                    type: "POST",
+						                    dataType: "json",
+						                    url: '<?php echo __URL__;?>index.php/admin/server/Editcardtype/id/'+vid,
+						                    data: $('#formEditHandlingFee').serialize(),
+						                    success: function (data) {
+							                     if(data.code == "1"){
+							                    	layer.msg("修改成功");
+							                    	location.href='';
+								                 }else{
+								                	layer.msg("失败");
+								                	location.href='';
+												 } 
+						                    	
+						                    },
+						                    error: function(data) {
+						                        alert("error:"+data.responseText);
+						                     }
+							 });
+					
+							},
+							shade :false,
+							maxmin :true
+						});
+						
+					});
+					
+			 });
+
+		};
+		
+		
+		
+		
+			layui.use(['layer'], function() {
+				var $ = layui.jquery,
+					layer = layui.layer;
+				//这个是点击之后才添加的。
+				$('#add').on('click', function() {
+					
+	
+					
+					 var con = '<form id="formAddHandlingFee"><div style="padding:10px;"><input type="text" class="layui-input" style="margin-bottom:5px;" name="cardtype_name" placeholder="类型名称,如:天卡,10次卡.." /><input type="text" class="layui-input" style="margin-bottom:5px;" name="cardtype_num" placeholder="数值,如1就是1小时或者1次,根据软件的类型自动划分.." /><input type="text" class="layui-input" style="margin-bottom:5px;" name="cardtype_me" placeholder="市场单价,市场上出售的价格.." /><span style="color:green;margin-left:5px;">绑定软件  </span><?php foreach ($item as $it){?><input type="checkbox" name="cardtype_itemid[]" value="<?php echo $it["id"];?>"><?php echo $it["item_name"] . "&nbsp;&nbsp;";}?><small style="color:red;">&nbsp;(不可修改,请仔细选择)</small></div></form>';
+						
+						layer.open({
+							type: 1,
+							title: '添加类型',
+							content: con,
+							btn: ['确定添加', '关闭'],
+							area: ['350px', '300px'],
+							yes: function(index, layero) {
+								$.ajax({
+						                    type: "POST",
+						                    dataType: "json",
+						                    url: '<?php echo __URL__;?>index.php/admin/server/Addcardtype',
+						                    data: $('#formAddHandlingFee').serialize(),
+						                    success: function (data) {
+							                     if(data.code == "1"){
+							                    	layer.msg("添加成功");
+							                    	location.href='';
+								                 }else{
+								                	layer.msg("添加失败");
+								                	location.href='';
+												 } 
+						                    	
+						                    },
+						                    error: function(data) {
+						                        alert("error:"+data.responseText);
+						                     }
+							 });
+					
+							},
+							shade :false,
+							maxmin :true
+						}); 
+
+				});
+
+				
+
+			});
+			
+			
+		</script>
+	
+	</body>
+
+</html>
